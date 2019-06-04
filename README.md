@@ -96,10 +96,10 @@ There are two ways to use this package:
 Available Functions:
 
 * `get()`
-  * Returns the formated value.
-  * Will accept *option* integer to return an array of values.
+  * Returns a *single* formated value.
+  * Will accept *option* integer to return an array of formatted values.
 * `unset($value)`
-  * Accepts a single or array of *formated* values.
+  * Accepts *formated* values in a string or array.
 
 ## Simple Usage
 
