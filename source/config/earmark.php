@@ -4,28 +4,7 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Prefix & Suffix
-    |--------------------------------------------------------------------------
-    | The default string to affix to the befining of the digits.
-    |
-    */
-
-    'prefix' => null,
-    'suffix' => null, // for future use
-
-    /*
-    |--------------------------------------------------------------------------
-    | Zero Padding
-    |--------------------------------------------------------------------------
-    | The number of zeros to prefix the digits with.  To provide uniformity.
-    |
-    */
-
-    'padding' => 8,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Hold
+    | Hold Size
     |--------------------------------------------------------------------------
     | This value detemines how many numbers are available for imediate use.
     | Numbers held for quick retreival, without the need to parse the primay
@@ -35,22 +14,44 @@ return [
     |
     */
 
-    'hold' => 3,
+    'hold' => 100,
 
     /*
     |--------------------------------------------------------------------------
     | Number Ranges
     |--------------------------------------------------------------------------
-    | This determines the starting number of the sequence.
+    | This determines the starting number of the sequence.  The 'max' value
+    | may be used in the future.
     |
     */
 
     'range' => [
 
-        'min' => 4000,
-        'max' => 5000, // for future use
+        'min' => 2000,
+        'max' => 3000, // for future use
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Zero Padding
+    |--------------------------------------------------------------------------
+    | The number of zeros to prefix the digits with.  To provide uniformity.
+    |
+    */
+
+    'padding' => 0,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Default Prefix & Suffix
+    |--------------------------------------------------------------------------
+    | The default string to affix to the befining of the digits.
+    |
+    */
+
+    'prefix' => null,
+    'suffix' => null, // for future use
 
     /*
     |--------------------------------------------------------------------------

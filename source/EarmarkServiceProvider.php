@@ -10,6 +10,7 @@ use Illuminate\Foundation\AliasLoader;
 use Poing\Earmark\Providers\EventServiceProvider;
 use Poing\Earmark\Http\Controllers\Serial;
 use Poing\Earmark\Http\Controllers\Sequential;
+use Poing\Earmark\Commands\EarMarkInstall;
 //use Illuminate\Foundation\AliasLoader;
 
 class EarmarkServiceProvider extends ServiceProvider {
@@ -37,7 +38,14 @@ class EarmarkServiceProvider extends ServiceProvider {
         // Publish Configuration Files
         $this->publishes([
                 __DIR__.'/config/earmark.php' => config_path('earmark.php'),
-        ]);
+        ], 'earmark-config');
+
+        // Load Commands
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                EarMarkInstall::class,
+            ]);
+        }
 
         $loader = AliasLoader::getInstance();
         $loader->alias('Earmarked', Facades\EarMarkFacade::class);

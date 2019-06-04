@@ -3,6 +3,28 @@ It uses Eloquent to store a handful of available values, locking the DB while th
 
 For instance fetching the next value to be applied later in a process.  An example is to reserve the next available phone number.  The phone number can be assigned to the active session, prevening concurrent sessions from obtaining the same value.  
 
+# Getting Started
+
+## 1. Install EarMark
+
+Run this at the command line:
+
+```
+composer require poing/earmark
+
+```
+
+This will update composer.json and install the package into the vendor/ directory.
+
+## 2. Publish the EarMark Configuration File
+
+To over-ride the default settings, initialise the config file by running this command:
+
+```
+php artisan earmark:config
+```
+
+Then open config/earmark.php and edit the settings to meet the requirements of your application.
 
 
 
@@ -10,13 +32,11 @@ For instance fetching the next value to be applied later in a process.  An examp
 
 Get Rid of Gaps in Numerical Sequences
 
-* 2000
-* 2001
-* 2003
+* 4000
+* 4001
+* 4003
 
-Depending on the package configuration, the next number provided would be 2002.
-
-eliminate gaps
+Depending on the package configuration, 4002 will be offered again.  Allowing for gaps in the number sequence to be eliminated.
 
 ```php
 Earmarked::get(); // returns: '00004000'
