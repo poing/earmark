@@ -1,7 +1,8 @@
-This is a Laravel package to earmark the next sequential value in a series.
-It uses Eloquent to store a handful of available values, locking the DB while the value is retreived.  This is to handle concurrency for multi-step oprations.  
+A Laravel package to earmark sequential values in a series and eliminates any gaps in the series when values are `unset`.  Allowing for values to be reused.
 
-For instance fetching the next value to be applied later in a process.  An example is to reserve the next available phone number.  The phone number can be assigned to the active session, prevening concurrent sessions from obtaining the same value.  
+For instance, it can be used to fetch the next value (or array of values) to be applied later in a process.  
+
+An example is reserving the next available phone extension for a user.  The phone extension can be reserved by the active session, preventing concurrent sessions from obtaining the same value.
 
 # Getting Started
 
@@ -11,14 +12,13 @@ Run this at the command line:
 
 ```
 composer require poing/earmark
-
 ```
 
 This will update composer.json and install the package into the vendor/ directory.
 
 ## 2. Publish the EarMark Configuration File
 
-To over-ride the default settings, initialise the config file by running this command:
+To over-ride the default settings, initialize the config file by running this command:
 
 ```
 php artisan earmark:config
@@ -26,7 +26,41 @@ php artisan earmark:config
 
 Then open config/earmark.php and edit the settings to meet the requirements of your application.
 
+# Settings
 
+## Hold Size
+
+This is the number of series values that are kept in an available pool.  Once the pool drops below a certain level, more values are added to the pool.
+
+## Number Range
+
+This package *currently* supports a minimal value.  `range.min` will define the starting value of the series.
+
+*`range.max` may be used in the future.*
+
+## Zero Padding
+
+Allows the output value to be zero-padded, depending on the needs of the application.
+
+```
+001
+000001
+00000000000001
+```
+
+## Prefix
+
+Appends a *prefix* to the output value.
+
+```
+ALPHA001
+ALPHA000001
+ALPHA00000000000001
+```
+
+# How to Use
+
+this and that 
 
 ## Consecutive Numbers
 
