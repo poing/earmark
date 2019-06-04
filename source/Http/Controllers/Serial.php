@@ -14,7 +14,7 @@ class Serial extends Controller
      * The prefix and suffix variables.
      */
     protected $prefix;
-    //protected $suffix;
+    protected $suffix;
     
     /**
      * The table column name variables.
@@ -31,7 +31,12 @@ class Serial extends Controller
      * The range variables.
      */
     protected $min;
-    //protected $max;
+    protected $max;
+
+    /**
+     * The Zero Padding Value.
+     */
+    protected $padding;
 
     /**
      * Create a new Serial instance.
@@ -42,16 +47,19 @@ class Serial extends Controller
      * @return void
      */
 
-    function __construct( $altPrefix = null, $altMin=null )
+    function __construct( $altPrefix = null, $altSuffix = null, $altPadding=null, $altMin=null, $altMax=null )
     {
         $this->model = config('earmark.model');
 
         $this->prefix = $altPrefix ?: config('earmark.prefix');
-        //$this->suffix = $altSuffix ?: config('earmark.suffix');
+        $this->suffix = $altSuffix ?: config('earmark.suffix');
 
         $this->digit = config('earmark.columns.digit');
         $this->group = config('earmark.columns.group');
         $this->min = !is_null($altMin) ? $altMin : config('earmark.range.min');
+        $this->max = !is_null($altMax) ? $altMax : config('earmark.range.max');
+        $this->padding = !is_null($altPadding) ? $altPadding : config('earmark.padding');
+
         $this->initHold();
 
     }
@@ -130,7 +138,7 @@ class Serial extends Controller
 
     private function zeroPadding($value)
     {
-        return str_pad($value,config('earmark.padding'),'0',STR_PAD_LEFT);
+        return str_pad($value,$this->padding,'0',STR_PAD_LEFT);
     }
     
     public function increment($fill=false)

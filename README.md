@@ -60,7 +60,40 @@ ALPHA00000000000001
 
 # How to Use
 
-this and that 
+## Simple Usage
+
+With the values from the configuration file, use:
+
+```php
+$serial = Earkmarked::get(); // Returns: '1'
+Earkmarked::unset($serial);
+```
+
+You can also *specify* the number of values to return in an array:
+
+```php
+$serial = Earkmarked::get(3); // Returns: [ '2', '3', '4', ]
+Earkmarked::unset($serial);
+```
+
+## Advanced Usage
+
+You can *initilize* a new series using `Earmark()` and supplying the following variables:
+
+* prefix
+* suffix *non-functional placeholder*
+* padding
+* min
+* max *non-functional placeholder*
+
+```php
+// Earmark(prefix, suffix, padding, min, max)
+$earmark = new Earmark('ZULU', null, 10, 5000, null);
+$earmark->get(); // Returns: 'ZULU0000005000'
+$earmark->get(3); // Returns: [ 'ZULU0000005001', 'ZULU0000005002', 'ZULU0000005003', ]
+```
+
+
 
 ## Consecutive Numbers
 
