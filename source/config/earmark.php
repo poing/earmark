@@ -28,7 +28,7 @@ return [
     'range' => [
 
         'min' => 2000,
-        'max' => 3000, // for future use
+        'max' => 9999, // reserved for future use
 
     ],
 
@@ -51,7 +51,7 @@ return [
     */
 
     'prefix' => null,
-    'suffix' => null, // for future use
+    'suffix' => null, // reserved for future use
 
     /*
     |--------------------------------------------------------------------------

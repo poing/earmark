@@ -84,6 +84,11 @@ ALPHA00000000002009
 
 # How to Use
 
+There are two ways to use this package:
+
+* `Earmarked` to use the *default* values in the pool.
+* `Earmark` to create a **new** pool of values to use.
+
 ## Simple Usage
 
 With the values from the configuration file, use `Earmarked::get()` and `Earmarked::unset()`.

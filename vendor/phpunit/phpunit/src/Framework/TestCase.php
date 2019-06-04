@@ -916,6 +916,7 @@ abstract class TestCase extends Assert implements SelfDescribing, Test
         $this->unregisterCustomComparators();
         $this->cleanupIniSettings();
         $this->cleanupLocaleSettings();
+        \libxml_clear_errors();
 
         // Perform assertion on output.
         if (!isset($e)) {

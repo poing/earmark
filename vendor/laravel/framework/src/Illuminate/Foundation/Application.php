@@ -29,7 +29,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
      *
      * @var string
      */
-    const VERSION = '5.8.18';
+    const VERSION = '5.8.19';
 
     /**
      * The base path for the Laravel installation.
@@ -517,6 +517,16 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
     public function isLocal()
     {
         return $this['env'] === 'local';
+    }
+
+    /**
+     * Determine if application is in production environment.
+     *
+     * @return bool
+     */
+    public function isProduction()
+    {
+        return $this['env'] === 'production';
     }
 
     /**

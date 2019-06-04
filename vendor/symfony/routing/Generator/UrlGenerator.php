@@ -27,6 +27,20 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class UrlGenerator implements UrlGeneratorInterface, ConfigurableRequirementsInterface
 {
+    private const QUERY_FRAGMENT_DECODED = [
+        // RFC 3986 explicitly allows those in the query/fragment to reference other URIs unencoded
+        '%2F' => '/',
+        '%3F' => '?',
+        // reserved chars that have no special meaning for HTTP URIs in a query or fragment
+        // this excludes esp. "&", "=" and also "+" because PHP would treat it as a space (form-encoded)
+        '%40' => '@',
+        '%3A' => ':',
+        '%21' => '!',
+        '%3B' => ';',
+        '%2C' => ',',
+        '%2A' => '*',
+    ];
+
     protected $routes;
     protected $context;
 
@@ -156,21 +170,25 @@ class UrlGenerator implements UrlGeneratorInterface, ConfigurableRequirementsInt
         $message = 'Parameter "{parameter}" for route "{route}" must match "{expected}" ("{given}" given) to generate a corresponding URL.';
         foreach ($tokens as $token) {
             if ('variable' === $token[0]) {
-                if (!$optional || !\array_key_exists($token[3], $defaults) || null !== $mergedParams[$token[3]] && (string) $mergedParams[$token[3]] !== (string) $defaults[$token[3]]) {
+                $varName = $token[3];
+                // variable is not important by default
+                $important = $token[5] ?? false;
+
+                if (!$optional || $important || !\array_key_exists($varName, $defaults) || (null !== $mergedParams[$varName] && (string) $mergedParams[$varName] !== (string) $defaults[$varName])) {
                     // check requirement (while ignoring look-around patterns)
-                    if (null !== $this->strictRequirements && !preg_match('#^'.preg_replace('/\(\?(?:=|<=|!|<!)((?:[^()\\\\]+|\\\\.|\((?1)\))*)\)/', '', $token[2]).'$#'.(empty($token[4]) ? '' : 'u'), $mergedParams[$token[3]])) {
+                    if (null !== $this->strictRequirements && !preg_match('#^'.preg_replace('/\(\?(?:=|<=|!|<!)((?:[^()\\\\]+|\\\\.|\((?1)\))*)\)/', '', $token[2]).'$#i'.(empty($token[4]) ? '' : 'u'), $mergedParams[$token[3]])) {
                         if ($this->strictRequirements) {
-                            throw new InvalidParameterException(strtr($message, ['{parameter}' => $token[3], '{route}' => $name, '{expected}' => $token[2], '{given}' => $mergedParams[$token[3]]]));
+                            throw new InvalidParameterException(strtr($message, ['{parameter}' => $varName, '{route}' => $name, '{expected}' => $token[2], '{given}' => $mergedParams[$varName]]));
                         }
 
                         if ($this->logger) {
-                            $this->logger->error($message, ['parameter' => $token[3], 'route' => $name, 'expected' => $token[2], 'given' => $mergedParams[$token[3]]]);
+                            $this->logger->error($message, ['parameter' => $varName, 'route' => $name, 'expected' => $token[2], 'given' => $mergedParams[$varName]]);
                         }
 
-                        return;
+                        return '';
                     }
 
-                    $url = $token[1].$mergedParams[$token[3]].$url;
+                    $url = $token[1].$mergedParams[$varName].$url;
                     $optional = false;
                 }
             } else {
@@ -222,7 +240,7 @@ class UrlGenerator implements UrlGeneratorInterface, ConfigurableRequirementsInt
                             $this->logger->error($message, ['parameter' => $token[3], 'route' => $name, 'expected' => $token[2], 'given' => $mergedParams[$token[3]]]);
                         }
 
-                        return;
+                        return '';
                     }
 
                     $routeHost = $token[1].$mergedParams[$token[3]].$routeHost;
@@ -271,13 +289,11 @@ class UrlGenerator implements UrlGeneratorInterface, ConfigurableRequirementsInt
         }
 
         if ($extra && $query = http_build_query($extra, '', '&', PHP_QUERY_RFC3986)) {
-            // "/" and "?" can be left decoded for better user experience, see
-            // http://tools.ietf.org/html/rfc3986#section-3.4
-            $url .= '?'.strtr($query, ['%2F' => '/']);
+            $url .= '?'.strtr($query, self::QUERY_FRAGMENT_DECODED);
         }
 
         if ('' !== $fragment) {
-            $url .= '#'.strtr(rawurlencode($fragment), ['%2F' => '/', '%3F' => '?']);
+            $url .= '#'.strtr(rawurlencode($fragment), self::QUERY_FRAGMENT_DECODED);
         }
 
         return $url;

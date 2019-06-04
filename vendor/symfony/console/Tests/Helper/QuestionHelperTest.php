@@ -198,6 +198,49 @@ class QuestionHelperTest extends AbstractQuestionHelperTest
         $this->assertEquals('FooBundle', $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
     }
 
+    public function testAskWithAutocompleteCallback()
+    {
+        if (!$this->hasSttyAvailable()) {
+            $this->markTestSkipped('`stty` is required to test autocomplete functionality');
+        }
+
+        // Po<TAB>Cr<TAB>P<DOWN ARROW><DOWN ARROW><NEWLINE>
+        $inputStream = $this->getInputStream("Pa\177\177o\tCr\tP\033[A\033[A\n");
+
+        $dialog = new QuestionHelper();
+        $helperSet = new HelperSet([new FormatterHelper()]);
+        $dialog->setHelperSet($helperSet);
+
+        $question = new Question('What\'s for dinner?');
+
+        // A simple test callback - return an array containing the words the
+        // user has already completed, suffixed with all known words.
+        //
+        // Eg: If the user inputs "Potato C", the return will be:
+        //
+        //     ["Potato Carrot ", "Potato Creme ", "Potato Curry ", ...]
+        //
+        // No effort is made to avoid irrelevant suggestions, as this is handled
+        // by the autocomplete function.
+        $callback = function ($input) {
+            $knownWords = ['Carrot', 'Creme', 'Curry', 'Parsnip', 'Pie', 'Potato', 'Tart'];
+            $inputWords = explode(' ', $input);
+            array_pop($inputWords);
+            $suggestionBase = $inputWords ? implode(' ', $inputWords).' ' : '';
+
+            return array_map(
+                function ($word) use ($suggestionBase) {
+                    return $suggestionBase.$word.' ';
+                },
+                $knownWords
+            );
+        };
+
+        $question->setAutocompleterCallback($callback);
+
+        $this->assertSame('Potato Creme Pie', $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+    }
+
     public function testAskWithAutocompleteWithNonSequentialKeys()
     {
         if (!$this->hasSttyAvailable()) {
@@ -665,6 +708,37 @@ class QuestionHelperTest extends AbstractQuestionHelperTest
         $this->assertEquals('AcmeDemoBundle', $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
         $this->assertEquals('AsseticBundle', $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
         $this->assertEquals('FooBundle', $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+    }
+
+    public function testTraversableMultiselectAutocomplete()
+    {
+        // <NEWLINE>
+        // F<TAB><NEWLINE>
+        // A<3x UP ARROW><TAB>,F<TAB><NEWLINE>
+        // F00<BACKSPACE><BACKSPACE>o<TAB>,A<DOWN ARROW>,<SPACE>SecurityBundle<NEWLINE>
+        // Acme<TAB>,<SPACE>As<TAB><29x BACKSPACE>S<TAB><NEWLINE>
+        // Ac<TAB>,As<TAB><3x BACKSPACE>d<TAB><NEWLINE>
+        $inputStream = $this->getInputStream("\nF\t\nA\033[A\033[A\033[A\t,F\t\nF00\177\177o\t,A\033[B\t, SecurityBundle\nSecurityBundle\nAcme\t, As\t\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177\177S\t\nAc\t,As\t\177\177\177d\t\n");
+
+        $dialog = new QuestionHelper();
+        $helperSet = new HelperSet([new FormatterHelper()]);
+        $dialog->setHelperSet($helperSet);
+
+        $question = new ChoiceQuestion(
+            'Please select a bundle (defaults to AcmeDemoBundle and AsseticBundle)',
+            ['AcmeDemoBundle', 'AsseticBundle', 'SecurityBundle', 'FooBundle'],
+            '0,1'
+        );
+
+        // This tests that autocomplete works for all multiselect choices entered by the user
+        $question->setMultiselect(true);
+
+        $this->assertEquals(['AcmeDemoBundle', 'AsseticBundle'], $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+        $this->assertEquals(['FooBundle'], $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+        $this->assertEquals(['AsseticBundle', 'FooBundle'], $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+        $this->assertEquals(['FooBundle', 'AsseticBundle', 'SecurityBundle'], $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+        $this->assertEquals(['SecurityBundle'], $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
+        $this->assertEquals(['AcmeDemoBundle', 'AsseticBundle'], $dialog->ask($this->createStreamableInputInterfaceMock($inputStream), $this->createOutputInterface(), $question));
     }
 
     protected function getInputStream($input)
