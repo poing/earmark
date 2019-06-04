@@ -119,10 +119,25 @@ $earmark->get(); // Returns: 'ZULU0000005004'
 $earmark->get(3); // Returns: [ 'ZULU0000005005', 'ZULU0000005006', 'ZULU0000005007', ]
 ```
 
-### How it works
+## How it works
 
 Searching for gaps in a numerical series of numbers can be resource intensive.  *Depends on the size of the series.*  
 
 This package uses two (`2`) tables, one for the series of used numbers and one to `Hold` a group of available numbers for immediate use.  The package will `get()` the next consecutive number from the `Hold` table.
 
 When the available numbers in the `Hold` falls below one-third, this package will repopulate the `Hold` with more numbers.  *This package works best with Laravel queues.*
+
+## Additional Feature
+
+### Auto-Increment
+
+*Sometimes* you just want the next number in an auto-increment series of numbers.  One is included in this package.  It *does not* support `prefix`, *will not* support `suffix`, but you **can** use zero-padding.
+
+```php
+Earmarked::increment(); // Returns: 1
+Earmarked::increment(); // Returns: 2
+$earmark = new Earmark('ZULU', null, 20, 5000, null);
+$earmark->increment(true); // Returns: '00000000000000000003'
+
+```
+
