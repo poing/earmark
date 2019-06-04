@@ -1,4 +1,4 @@
-This is a Laravel package to ermark the next sequential value in a series.
+This is a Laravel package to earmark the next sequential value in a series.
 It uses Eloquent to store a handful of available values, locking the DB while the value is retreived.  This is to handle concurrency for multi-step oprations.  
 
 For instance fetching the next value to be applied later in a process.  An example is to reserve the next available phone number.  The phone number can be assigned to the active session, prevening concurrent sessions from obtaining the same value.  
@@ -19,9 +19,12 @@ Depending on the package configuration, the next number provided would be 2002.
 eliminate gaps
 
 ```php
-$earmark = new Poing\Earmark\Http\Controllers\Serial();
-$earmark->get();  // returns: 2002
-$earmark->release(2002);
+Earmarked::get(); // returns: '00004000'
+Earmarked::unset('00004000');
+Earmarked::get(); // returns: '00004001'
+Earmarked::get(); // returns: '00004002'
+Earmarked::get(); // returns: '00004000'
+Earmarked::get(); // returns: '00004003'
 ```
 
 ### How it works
@@ -36,14 +39,14 @@ When the available numbers in the `Hold` falls below one-third, this package wil
 
 ## Simple Usage
 
-```
+```php
 $serial = Earkmarked::get();  Returns 'PREFIX00000001'
 $serial->unset('PREFIX00000001'); 
 ```
 
 
 You may also get and unset arrays.
-```
+```php
 $serial = new Earmark('PREFIX', 5555);
 $serial->get(2); Returns ['PREFIX0005555', 'PREFIX00005556', ]
 
