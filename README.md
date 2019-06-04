@@ -99,7 +99,7 @@ Available Functions:
   * Returns a *single* formated value.
   * Will accept *option* integer to return an array of formatted values.
 * `unset($value)`
-  * Accepts *formated* values in a string or array.
+  * Accepts *formated* values as a string or array.
 
 ## Simple Usage
 
