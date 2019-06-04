@@ -117,6 +117,7 @@ $serial = Earkmarked::get(3); // Returns: [ '2015', '2016', '2017', ]
 $earmark = new Earmark('ZULU', null, 10, 5000, null);
 $earmark->get(); // Returns: 'ZULU0000005004'
 $earmark->get(3); // Returns: [ 'ZULU0000005005', 'ZULU0000005006', 'ZULU0000005007', ]
+```
 
 ### How it works
 
