@@ -1,8 +1,8 @@
-A Laravel package to earmark sequential values in a series and eliminates any gaps in the series when values are `unset`.  Allowing for values to be reused.
+A Laravel package to earmark sequential values in a series and eliminate any gaps in the series when values are `unset`.  *Allowing for values to be reused.*
 
-For instance, it can be used to fetch the next value (or array of values) to be applied later in a process.  
+For instance, it can be used to fetch the next value (or array of values) to be used in an application.  
 
-An example is reserving the next available phone extension for a user.  The phone extension can be reserved by the active session, preventing concurrent sessions from obtaining the same value.
+An example is reserving the next available phone extension for a user.  The phone extension can be reserved by the active session, preventing other sessions from obtaining the same value.
 
 # Getting Started
 
@@ -36,11 +36,18 @@ You may want to change the default `QUEUE_CONNECTION` to use another strategy.  
 
 ## Hold Size
 
-This is the number of series values that are kept in an available pool.  Once the pool drops below a certain level, more values are added to the pool.
+This is the number of series values that are kept in an available pool.  Once the pool drops below a certain level, more values are added to the pool.  *This is where unused values are recycled.*
 
 ## Number Range
 
-This package *currently* supports a minimal value.  `range.min` will define the starting value of the series.
+This package *currently* supports a minimal value.  `range.min` will define the starting value of the series.  *Default: 2000*
+
+```
+2000
+2001
+2002
+2003
+```
 
 *`range.max` may be used in the future.*
 
@@ -49,9 +56,9 @@ This package *currently* supports a minimal value.  `range.min` will define the 
 Allows the output value to be zero-padded, depending on the needs of the application.
 
 ```
-001
-000001
-00000000000001
+2004
+002005
+00000000002006
 ```
 
 ## Prefix & Suffix
@@ -59,9 +66,9 @@ Allows the output value to be zero-padded, depending on the needs of the applica
 Appends a *prefix* to the output value.
 
 ```
-ALPHA001
-ALPHA000001
-ALPHA00000000000001
+ALPHA2007
+ALPHA002008
+ALPHA00000000002009
 ```
 
 *`suffix` may be used in the future.*
@@ -71,17 +78,17 @@ ALPHA00000000000001
 
 ## Simple Usage
 
-With the values from the configuration file, use:
+With the values from the configuration file, use `Earmarked::get()` and `Earmarked::unset()`.
 
 ```php
-$serial = Earkmarked::get(); // Returns: '1'
+$serial = Earkmarked::get(); // Returns: '2010'
 Earkmarked::unset($serial);
 ```
 
 You can also *specify* the number of values to return in an array:
 
 ```php
-$serial = Earkmarked::get(3); // Returns: [ '2', '3', '4', ]
+$serial = Earkmarked::get(3); // Returns: [ '2011', '2012', '2013', ]
 Earkmarked::unset($serial);
 ```
 
@@ -103,6 +110,13 @@ $earmark->get(3); // Returns: [ 'ZULU0000005001', 'ZULU0000005002', 'ZULU0000005
 ```
 
 *The new series will not affect the default series, calling the series again will provide the next values.*
+
+```php
+$serial = Earkmarked::get(); // Returns: '2014'
+$serial = Earkmarked::get(3); // Returns: [ '2015', '2016', '2017', ]
+$earmark = new Earmark('ZULU', null, 10, 5000, null);
+$earmark->get(); // Returns: 'ZULU0000005004'
+$earmark->get(3); // Returns: [ 'ZULU0000005005', 'ZULU0000005006', 'ZULU0000005007', ]
 
 ### How it works
 
