@@ -26,11 +26,19 @@ php artisan earmark:config
 
 Then open config/earmark.php and edit the settings to meet the requirements of your application.
 
-## 3. Recommended
+## 3. Run Migrations
 
-This package is designed to use Laravel Queues, to defer the time consuming task of repopulating available pool of values.
+Run the package migration files by running this at the command line:
 
-You may want to change the default `QUEUE_CONNECTION` to use another strategy.  But the package does work without the default, it just may cause some latency in your application.
+```
+php artisan migrate
+```
+
+## 4. Recommended
+
+This package is designed to use Laravel Queues, to defer the time consuming task of repopulating the available pool of values.
+
+You may want to change the default `QUEUE_CONNECTION` to use another strategy.  But the package *also* works with the default `sync`, but **may** cause latency in your application.
 
 # Settings
 
