@@ -26,9 +26,9 @@ php artisan earmark:config
 
 Then open config/earmark.php and edit the settings to meet the requirements of your application.
 
-## 3. Run Migrations
+## 3. Run the Migrations
 
-Run the package migration files by running this at the command line:
+Run the package migration files at the command line:
 
 ```
 php artisan migrate
@@ -139,7 +139,9 @@ When the available numbers in the `Hold` falls below one-third, this package wil
 
 ### Auto-Increment
 
-*Sometimes* you just want the next number in an auto-increment series of numbers.  One is included in this package.  It *does not* support `prefix`, *will not* support `suffix`, but you **can** use zero-padding.
+*Sometimes* you just want the next number in an auto-increment series.  One is included in this package.  It *does not* support `prefix`, *will not* support `suffix`, but you **can** use zero-padding.
+
+**Do not use `unset()` with `increment()` values!  You have been warned!**
 
 ```php
 Earmarked::increment(); // Returns: 1
