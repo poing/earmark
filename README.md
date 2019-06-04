@@ -2,7 +2,7 @@ A Laravel package to earmark sequential values in a series and eliminate any gap
 
 It can be used to fetch the next value (or array of values) to be used in an application.  
 
-**An example... **
+**An example...**
 
 Reserving the next available phone extension for a user.  The phone extension can be reserved by the active session, preventing other sessions from obtaining the same value.
 
