@@ -93,6 +93,14 @@ There are two ways to use this package:
 * `Earmarked` to use the *default* values in the pool.
 * `Earmark` to create a **new** pool of values to use.
 
+Available Functions:
+
+* `get()`
+  * Returns the formated value.
+  * Will accept *option* integer to return an array of values.
+* `unset($value)`
+  * Accepts a single or array of *formated* values.
+
 ## Simple Usage
 
 With the values from the configuration file, use `Earmarked::get()` and `Earmarked::unset()`.
