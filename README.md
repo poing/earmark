@@ -26,6 +26,12 @@ php artisan earmark:config
 
 Then open config/earmark.php and edit the settings to meet the requirements of your application.
 
+## 3. Recommended
+
+This package is designed to use Laravel Queues, to defer the time consuming task of repopulating available pool of values.
+
+You may want to change the default `QUEUE_CONNECTION` to use another strategy.  But the package does work without the default, it just may cause some latency in your application.
+
 # Settings
 
 ## Hold Size
@@ -48,7 +54,7 @@ Allows the output value to be zero-padded, depending on the needs of the applica
 00000000000001
 ```
 
-## Prefix
+## Prefix & Suffix
 
 Appends a *prefix* to the output value.
 
@@ -57,6 +63,9 @@ ALPHA001
 ALPHA000001
 ALPHA00000000000001
 ```
+
+*`suffix` may be used in the future.*
+
 
 # How to Use
 
@@ -78,13 +87,13 @@ Earkmarked::unset($serial);
 
 ## Advanced Usage
 
-You can *initilize* a new series using `Earmark()` and supplying the following variables:
+You can *initialize* a new series using `Earmark()` and supplying the following variables:
 
 * prefix
-* suffix *non-functional placeholder*
+* suffix *(non-functional placeholder)*
 * padding
 * min
-* max *non-functional placeholder*
+* max *(non-functional placeholder)*
 
 ```php
 // Earmark(prefix, suffix, padding, min, max)
@@ -93,26 +102,7 @@ $earmark->get(); // Returns: 'ZULU0000005000'
 $earmark->get(3); // Returns: [ 'ZULU0000005001', 'ZULU0000005002', 'ZULU0000005003', ]
 ```
 
-
-
-## Consecutive Numbers
-
-Get Rid of Gaps in Numerical Sequences
-
-* 4000
-* 4001
-* 4003
-
-Depending on the package configuration, 4002 will be offered again.  Allowing for gaps in the number sequence to be eliminated.
-
-```php
-Earmarked::get(); // returns: '00004000'
-Earmarked::unset('00004000');
-Earmarked::get(); // returns: '00004001'
-Earmarked::get(); // returns: '00004002'
-Earmarked::get(); // returns: '00004000'
-Earmarked::get(); // returns: '00004003'
-```
+*The new series will not affect the default series, calling the series again will provide the next values.*
 
 ### How it works
 
@@ -121,23 +111,3 @@ Searching for gaps in a numerical series of numbers can be resource intensive.  
 This package uses two (`2`) tables, one for the series of used numbers and one to `Hold` a group of available numbers for immediate use.  The package will `get()` the next consecutive number from the `Hold` table.
 
 When the available numbers in the `Hold` falls below one-third, this package will repopulate the `Hold` with more numbers.  *This package works best with Laravel queues.*
-
-
-
-## Simple Usage
-
-```php
-$serial = Earkmarked::get();  Returns 'PREFIX00000001'
-$serial->unset('PREFIX00000001'); 
-```
-
-
-You may also get and unset arrays.
-```php
-$serial = new Earmark('PREFIX', 5555);
-$serial->get(2); Returns ['PREFIX0005555', 'PREFIX00005556', ]
-
-$old = ['PREFIX00005555', 'PREFIX00005556', ]
-$serial->unset($old); 
-```
-
