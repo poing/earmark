@@ -1,0 +1,41 @@
+{
+  "name": "poing/earmark",
+  "description": "Designate (funds or resources) for a particular purpose.",
+  "keywords": [],
+  "homepage": "https://github.com/poing/earmark",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Brian LaVallee",
+      "email": "brian.lavallee@invite-comm.jp"
+    }
+  ],
+  "require": {
+    "php": "^7",
+    "illuminate/config": "~5.0",
+    "illuminate/support": "~5.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^7",
+    "laravel/framework": "^5.7",
+    "orchestra/testbench": "~3.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Poing\\Earmark\\": "source/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Earmark\\Test\\": "test/"
+    }
+  },
+  "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Poing\\Earmark\\EarmarkServiceProvider"
+            ]
+        }
+    }
+}

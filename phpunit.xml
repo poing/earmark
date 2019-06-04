@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="vendor/autoload.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false">
+
+    <testsuite name="app1" >
+        <directory>./test</directory>
+    </testsuite>
+    
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./source</directory>
+            <exclude>
+                <directory suffix="Factory.php">./source</directory>
+                <directory suffix=".blade.php">./source</directory>
+                <directory suffix=".php">./source/routes</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+</phpunit>
+
