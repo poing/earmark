@@ -31,12 +31,11 @@ class LoggingTranslator implements TranslatorInterface, LegacyTranslatorInterfac
 
     /**
      * @param TranslatorInterface $translator The translator must implement TranslatorBagInterface
-     * @param LoggerInterface     $logger
      */
     public function __construct($translator, LoggerInterface $logger)
     {
         if (!$translator instanceof LegacyTranslatorInterface && !$translator instanceof TranslatorInterface) {
-            throw new \TypeError(sprintf('Argument 1 passed to %s() must be an instance of %s, %s given.', __METHOD__, TranslatorInterface::class, \is_object($translator) ? \get_class($translator) : \gettype($translator)));
+            throw new \TypeError(sprintf('Argument 1 passed to "%s()" must be an instance of "%s", "%s" given.', __METHOD__, TranslatorInterface::class, \is_object($translator) ? \get_class($translator) : \gettype($translator)));
         }
         if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
             throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_class($translator)));
@@ -84,6 +83,10 @@ class LoggingTranslator implements TranslatorInterface, LegacyTranslatorInterfac
     {
         $prev = $this->translator->getLocale();
         $this->translator->setLocale($locale);
+        if ($prev === $locale) {
+            return;
+        }
+
         $this->logger->debug(sprintf('The locale of the translator has changed from "%s" to "%s".', $prev, $locale));
     }
 
@@ -127,12 +130,8 @@ class LoggingTranslator implements TranslatorInterface, LegacyTranslatorInterfac
 
     /**
      * Logs for missing translations.
-     *
-     * @param string      $id
-     * @param string|null $domain
-     * @param string|null $locale
      */
-    private function log($id, $domain, $locale)
+    private function log(?string $id, ?string $domain, ?string $locale)
     {
         if (null === $domain) {
             $domain = 'messages';

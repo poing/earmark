@@ -70,6 +70,7 @@ class EarmarkServiceProvider extends ServiceProvider {
         
         $this->app->register(EventServiceProvider::class);
         
+		// @codeCoverageIgnoreStart
         //Poing\Earmark\Http\Controllers
         $this->app->singleton('earmark', function () {
             return new Serial;
@@ -79,6 +80,7 @@ class EarmarkServiceProvider extends ServiceProvider {
         $this->app->singleton('sequence', function () {
             return new Sequential;
         });
+		// @codeCoverageIgnoreEnd
 
 
     }

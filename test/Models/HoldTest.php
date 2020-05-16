@@ -1,9 +1,9 @@
 <?php
 
-namespace EarMark\Test\Models;
+namespace Earmark\Test\Models;
 
-use EarMark\Test\Models\AbstractTest;
-use Poing\EarMark\Models\Hold;
+use Earmark\Test\Models\AbstractTest;
+use Poing\Earmark\Models\Hold;
 
 /**
  * @coversDefaultClass Poing\EarMark\Models\Hold
@@ -18,5 +18,16 @@ class HoldTest extends AbstractTest
   {
 	$this->assertTrue(Hold::probe());
   }
+
+	/** @test */
+	public function commandTest()
+	{
+
+		$this->artisan('earmark:config')
+			->expectsOutput('EarMark installed successfully.')
+			->assertExitCode(0);
+
+
+	}
 
 }

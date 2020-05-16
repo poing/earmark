@@ -34,6 +34,7 @@
  * - Nizar Jouini
  * - Marko Seppae
  * - Tomi Mynttinen (Pikseli)
+ * - Petteri (powergrip)
  */
 return [
     'year' => ':count vuosi|:count vuotta',
@@ -49,14 +50,25 @@ return [
     'minute' => ':count minuutti|:count minuuttia',
     'min' => ':count min',
     'second' => ':count sekunti|:count sekuntia',
+    'a_second' => 'muutama sekunti|:count sekuntia',
     's' => ':count s',
     'ago' => ':time sitten',
-    'from_now' => ':time tästä hetkestä',
+    'from_now' => ':time päästä',
+    'year_from_now' => ':count vuoden',
+    'month_from_now' => ':count kuukauden',
+    'week_from_now' => ':count viikon',
+    'day_from_now' => ':count päivän',
+    'hour_from_now' => ':count tunnin',
+    'minute_from_now' => ':count minuutin',
+    'second_from_now' => ':count sekunnin',
     'after' => ':time sen jälkeen',
     'before' => ':time ennen',
     'first_day_of_week' => 1,
     'day_of_first_week_of_year' => 4,
     'list' => [', ', ' ja '],
+    'diff_now' => 'nyt',
+    'diff_yesterday' => 'eilen',
+    'diff_tomorrow' => 'huomenna',
     'formats' => [
         'LT' => 'HH.mm',
         'LTS' => 'HH.mm:ss',

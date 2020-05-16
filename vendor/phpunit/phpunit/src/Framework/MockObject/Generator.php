@@ -374,7 +374,14 @@ class Generator
             ]
         );
 
-        return $this->getObject($classTemplate->render(), $className['className']);
+        return $this->getObject(
+            $classTemplate->render(),
+            $className['className'],
+            '',
+            $callOriginalConstructor,
+            $callAutoload,
+            $arguments
+        );
     }
 
     /**
@@ -560,15 +567,17 @@ class Generator
      *
      * @return \ReflectionMethod[]
      */
-    private function getInterfaceOwnMethods(string $interfaceName): array
+    private function userDefinedInterfaceMethods(string $interfaceName): array
     {
-        $reflect = new ReflectionClass($interfaceName);
-        $methods = [];
+        $interface = new ReflectionClass($interfaceName);
+        $methods   = [];
 
-        foreach ($reflect->getMethods() as $method) {
-            if ($method->getDeclaringClass()->getName() === $interfaceName) {
-                $methods[] = $method;
+        foreach ($interface->getMethods() as $method) {
+            if (!$method->isUserDefined()) {
+                continue;
             }
+
+            $methods[] = $method;
         }
 
         return $methods;
@@ -759,7 +768,7 @@ class Generator
                     );
                 }
 
-                foreach ($this->getInterfaceOwnMethods($mockClassName['fullClassName']) as $method) {
+                foreach ($this->userDefinedInterfaceMethods($mockClassName['fullClassName']) as $method) {
                     $methodName = $method->getName();
 
                     if ($class->hasMethod($methodName)) {
@@ -785,7 +794,7 @@ class Generator
 
                 $mockClassName = $this->generateClassName(
                     $actualClassName,
-                    '',
+                    $mockClassName['className'],
                     'Mock_'
                 );
             }

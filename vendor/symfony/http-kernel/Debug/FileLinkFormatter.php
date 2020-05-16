@@ -13,7 +13,6 @@ namespace Symfony\Component\HttpKernel\Debug;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -68,7 +67,7 @@ class FileLinkFormatter
      */
     public function __sleep(): array
     {
-        $this->getFileLinkFormat();
+        $this->fileLinkFormat = $this->getFileLinkFormat();
 
         return ['fileLinkFormat'];
     }
@@ -80,24 +79,28 @@ class FileLinkFormatter
     {
         try {
             return $router->generate($routeName).$queryString;
-        } catch (ExceptionInterface $e) {
+        } catch (\Throwable $e) {
             return null;
         }
     }
 
     private function getFileLinkFormat()
     {
+        if ($this->fileLinkFormat) {
+            return $this->fileLinkFormat;
+        }
+
         if ($this->requestStack && $this->baseDir && $this->urlFormat) {
             $request = $this->requestStack->getMasterRequest();
 
             if ($request instanceof Request && (!$this->urlFormat instanceof \Closure || $this->urlFormat = ($this->urlFormat)())) {
-                $this->fileLinkFormat = [
-                    $request->getSchemeAndHttpHost().$request->getBasePath().$this->urlFormat,
+                return [
+                    $request->getSchemeAndHttpHost().$this->urlFormat,
                     $this->baseDir.\DIRECTORY_SEPARATOR, '',
                 ];
             }
         }
 
-        return $this->fileLinkFormat;
+        return null;
     }
 }

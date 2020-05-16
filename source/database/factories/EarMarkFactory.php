@@ -1,12 +1,14 @@
 <?php
 
 use Faker\Generator as Faker;
+use Poing\Earmark\Helpers\Boost;
 
-$autoIncrement = autoIncrement();
+$foo = new Boost;
+$count = $foo->autoIncrement();
 
-$factory->define(Poing\Earmark\Models\EarMark::class, function (Faker $faker) use ($autoIncrement) {
+$factory->define(Poing\Earmark\Models\EarMark::class, function (Faker $faker) use ($count) {
 
-        $autoIncrement->next();$autoIncrement->next();
+        $count->next();$count->next();
 
     return [
     /*
@@ -22,9 +24,3 @@ $factory->define(Poing\Earmark\Models\EarMark::class, function (Faker $faker) us
 
 });
 
-function autoIncrement()
-{
-    for ($i = config('earmark.range.min') -1; $i < config('earmark.range.max'); $i++) {
-        yield $i;
-    }
-}

@@ -627,7 +627,7 @@ class Container implements ArrayAccess, ContainerContract
                 throw $e;
             }
 
-            throw new EntryNotFoundException;
+            throw new EntryNotFoundException($id);
         }
     }
 
@@ -753,9 +753,7 @@ class Container implements ArrayAccess, ContainerContract
      */
     protected function findInContextualBindings($abstract)
     {
-        if (isset($this->contextual[end($this->buildStack)][$abstract])) {
-            return $this->contextual[end($this->buildStack)][$abstract];
-        }
+        return $this->contextual[end($this->buildStack)][$abstract] ?? null;
     }
 
     /**
@@ -814,9 +812,13 @@ class Container implements ArrayAccess, ContainerContract
         // Once we have all the constructor's parameters we can create each of the
         // dependency instances and then use the reflection instances to make a
         // new instance of this class, injecting the created dependencies in.
-        $instances = $this->resolveDependencies(
-            $dependencies
-        );
+        try {
+            $instances = $this->resolveDependencies($dependencies);
+        } catch (BindingResolutionException $e) {
+            array_pop($this->buildStack);
+
+            throw $e;
+        }
 
         array_pop($this->buildStack);
 
@@ -1179,7 +1181,7 @@ class Container implements ArrayAccess, ContainerContract
     }
 
     /**
-     * Set the globally available instance of the container.
+     * Get the globally available instance of the container.
      *
      * @return static
      */

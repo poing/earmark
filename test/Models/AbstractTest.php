@@ -1,6 +1,6 @@
 <?php
 
-namespace EarMark\Test\Models;
+namespace Earmark\Test\Models;
 
 use Orchestra\Testbench\TestCase;
 
@@ -15,6 +15,10 @@ abstract class AbstractTest extends TestCase
         parent::setUp();
         //$this->withFactories(__DIR__.'../../src/database/factories');
         //$this->artisan('migrate');
+        $this->loadMigrationsFrom(__DIR__.'../../source/database/migrations');
+        $this->withFactories(__DIR__.'../../source/database/factories');
+        $this->artisan('migrate');
+    
     }
 
     /**

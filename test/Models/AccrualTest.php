@@ -1,9 +1,9 @@
 <?php
 
-namespace EarMark\Test\Models;
+namespace Earmark\Test\Models;
 
-use EarMark\Test\Models\AbstractTest;
-use Poing\EarMark\Models\Accrual;
+use Earmark\Test\Models\AbstractTest;
+use Poing\Earmark\Models\Accrual;
 
 /**
  * @coversDefaultClass Poing\EarMark\Models\Accrual

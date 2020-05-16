@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-/**
+/*
  * Authors:
  * - Alessandro Di Felice
  * - François B
@@ -17,11 +17,12 @@
  * - Gabriel Monteagudo
  * - JD Isaacks
  * - yiannisdesp
+ * - Ilias Kasmeridis (iliaskasm)
  */
 return [
     'year' => ':count χρόνος|:count χρόνια',
     'a_year' => 'ένας χρόνος|:count χρόνια',
-    'y' => ':count χρό.',
+    'y' => ':count χρ.',
     'month' => ':count μήνας|:count μήνες',
     'a_month' => 'ένας μήνας|:count μήνες',
     'm' => ':count μήν.',
@@ -40,10 +41,13 @@ return [
     'second' => ':count δευτερόλεπτο|:count δευτερόλεπτα',
     'a_second' => 'λίγα δευτερόλεπτα|:count δευτερόλεπτα',
     's' => ':count δευ.',
-    'ago' => ':time πριν',
+    'ago' => 'πριν :time',
     'from_now' => 'σε :time',
     'after' => ':time μετά',
     'before' => ':time πριν',
+    'diff_now' => 'τώρα',
+    'diff_yesterday' => 'χθες',
+    'diff_tomorrow' => 'αύριο',
     'formats' => [
         'LT' => 'h:mm A',
         'LTS' => 'h:mm:ss A',
@@ -71,7 +75,7 @@ return [
     'meridiem' => ['ΠΜ', 'ΜΜ', 'πμ', 'μμ'],
     'months' => ['Ιανουαρίου', 'Φεβρουαρίου', 'Μαρτίου', 'Απριλίου', 'Μαΐου', 'Ιουνίου', 'Ιουλίου', 'Αυγούστου', 'Σεπτεμβρίου', 'Οκτωβρίου', 'Νοεμβρίου', 'Δεκεμβρίου'],
     'months_standalone' => ['Ιανουάριος', 'Φεβρουάριος', 'Μάρτιος', 'Απρίλιος', 'Μάιος', 'Ιούνιος', 'Ιούλιος', 'Αύγουστος', 'Σεπτέμβριος', 'Οκτώβριος', 'Νοέμβριος', 'Δεκέμβριος'],
-    'months_regexp' => '/D[oD]?[\s,]+MMMM/',
+    'months_regexp' => '/(D[oD]?[\s,]+MMMM|L{2,4}|l{2,4})/',
     'months_short' => ['Ιαν', 'Φεβ', 'Μαρ', 'Απρ', 'Μαϊ', 'Ιουν', 'Ιουλ', 'Αυγ', 'Σεπ', 'Οκτ', 'Νοε', 'Δεκ'],
     'weekdays' => ['Κυριακή', 'Δευτέρα', 'Τρίτη', 'Τετάρτη', 'Πέμπτη', 'Παρασκευή', 'Σάββατο'],
     'weekdays_short' => ['Κυρ', 'Δευ', 'Τρι', 'Τετ', 'Πεμ', 'Παρ', 'Σαβ'],

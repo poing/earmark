@@ -32,6 +32,13 @@ class MailMessage extends SimpleMessage implements Renderable
     public $markdown = 'notifications::email';
 
     /**
+     * The current theme being used when generating emails.
+     *
+     * @var string|null
+     */
+    public $theme;
+
+    /**
      * The "from" information for the message.
      *
      * @var array
@@ -130,6 +137,19 @@ class MailMessage extends SimpleMessage implements Renderable
     public function template($template)
     {
         $this->markdown = $template;
+
+        return $this;
+    }
+
+    /**
+     * Set the theme to use with the Markdown template.
+     *
+     * @param  string  $theme
+     * @return $this
+     */
+    public function theme($theme)
+    {
+        $this->theme = $theme;
 
         return $this;
     }
@@ -289,6 +309,12 @@ class MailMessage extends SimpleMessage implements Renderable
      */
     public function render()
     {
+        if (isset($this->view)) {
+            return Container::getInstance()->make('mailer')->render(
+                $this->view, $this->data()
+            );
+        }
+
         return Container::getInstance()
             ->make(Markdown::class)
             ->render($this->markdown, $this->data());

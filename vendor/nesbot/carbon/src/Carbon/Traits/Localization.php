@@ -11,12 +11,22 @@
 namespace Carbon\Traits;
 
 use Carbon\CarbonInterface;
+use Carbon\Exceptions\InvalidTypeException;
+use Carbon\Exceptions\NotLocaleAwareException;
 use Carbon\Language;
 use Carbon\Translator;
 use Closure;
-use InvalidArgumentException;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\LocaleAwareInterface;
+use Symfony\Contracts\Translation\TranslatorInterface as ContractsTranslatorInterface;
+
+if (!interface_exists('Symfony\\Component\\Translation\\TranslatorInterface')) {
+    class_alias(
+        'Symfony\\Contracts\\Translation\\TranslatorInterface',
+        'Symfony\\Component\\Translation\\TranslatorInterface'
+    );
+}
 
 /**
  * Trait Localization.
@@ -129,6 +139,16 @@ trait Localization
     }
 
     /**
+     * Return true if the current instance has its own translator.
+     *
+     * @return bool
+     */
+    public function hasLocalTranslator()
+    {
+        return isset($this->localTranslator);
+    }
+
+    /**
      * Get the translator of the current instance or the default if none set.
      *
      * @return \Symfony\Component\Translation\TranslatorInterface
@@ -165,12 +185,16 @@ trait Localization
     public static function getTranslationMessageWith($translator, string $key, string $locale = null, string $default = null)
     {
         if (!($translator instanceof TranslatorBagInterface && $translator instanceof TranslatorInterface)) {
-            throw new InvalidArgumentException(
+            throw new InvalidTypeException(
                 'Translator does not implement '.TranslatorInterface::class.' and '.TranslatorBagInterface::class.'.'
             );
         }
 
-        $result = $translator->getCatalogue($locale ?? $translator->getLocale())->get($key);
+        if (!$locale && $translator instanceof LocaleAwareInterface) {
+            $locale = $translator->getLocale();
+        }
+
+        $result = $translator->getCatalogue($locale)->get($key);
 
         return $result === $key ? $default : $result;
     }
@@ -214,7 +238,13 @@ trait Localization
             $parameters[':count'] = $parameters['%count%'];
         }
 
-        return (string) $translator->transChoice($key, $number, $parameters);
+        // @codeCoverageIgnoreStart
+        $choice = $translator instanceof ContractsTranslatorInterface
+            ? $translator->trans($key, $parameters)
+            : $translator->transChoice($key, $number, $parameters);
+        // @codeCoverageIgnoreEnd
+
+        return (string) $choice;
     }
 
     /**
@@ -227,9 +257,65 @@ trait Localization
      *
      * @return string
      */
-    public function translate(string $key, array $parameters = [], $number = null, TranslatorInterface $translator = null): string
+    public function translate(string $key, array $parameters = [], $number = null, TranslatorInterface $translator = null, bool $altNumbers = false): string
     {
-        return static::translateWith($translator ?: $this->getLocalTranslator(), $key, $parameters, $number);
+        $translation = static::translateWith($translator ?: $this->getLocalTranslator(), $key, $parameters, $number);
+
+        if ($number !== null && $altNumbers) {
+            return str_replace($number, $this->translateNumber($number), $translation);
+        }
+
+        return $translation;
+    }
+
+    /**
+     * Returns the alternative number for a given integer if available in the current locale.
+     *
+     * @param int $number
+     *
+     * @return string
+     */
+    public function translateNumber(int $number): string
+    {
+        $translateKey = "alt_numbers.$number";
+        $symbol = $this->translate($translateKey);
+
+        if ($symbol !== $translateKey) {
+            return $symbol;
+        }
+
+        if ($number > 99 && $this->translate('alt_numbers.99') !== 'alt_numbers.99') {
+            $start = '';
+            foreach ([10000, 1000, 100] as $exp) {
+                $key = "alt_numbers_pow.$exp";
+                if ($number >= $exp && $number < $exp * 10 && ($pow = $this->translate($key)) !== $key) {
+                    $unit = floor($number / $exp);
+                    $number -= $unit * $exp;
+                    $start .= ($unit > 1 ? $this->translate("alt_numbers.$unit") : '').$pow;
+                }
+            }
+            $result = '';
+            while ($number) {
+                $chunk = $number % 100;
+                $result = $this->translate("alt_numbers.$chunk").$result;
+                $number = floor($number / 100);
+            }
+
+            return "$start$result";
+        }
+
+        if ($number > 9 && $this->translate('alt_numbers.9') !== 'alt_numbers.9') {
+            $result = '';
+            while ($number) {
+                $chunk = $number % 10;
+                $result = $this->translate("alt_numbers.$chunk").$result;
+                $number = floor($number / 10);
+            }
+
+            return $result;
+        }
+
+        return "$number";
     }
 
     /**
@@ -295,10 +381,10 @@ trait Localization
             }
 
             $$translationKey = array_merge(
-                $mode & CarbonInterface::TRANSLATE_MONTHS ? array_pad($months, 12, '>>DO NOT REPLACE<<') : [],
-                $mode & CarbonInterface::TRANSLATE_MONTHS ? array_pad($messages['months_short'], 12, '>>DO NOT REPLACE<<') : [],
-                $mode & CarbonInterface::TRANSLATE_DAYS ? array_pad($weekdays, 7, '>>DO NOT REPLACE<<') : [],
-                $mode & CarbonInterface::TRANSLATE_DAYS ? array_pad($messages['weekdays_short'], 7, '>>DO NOT REPLACE<<') : [],
+                $mode & CarbonInterface::TRANSLATE_MONTHS ? static::getTranslationArray($months, 12, $timeString) : [],
+                $mode & CarbonInterface::TRANSLATE_MONTHS ? static::getTranslationArray($messages['months_short'], 12, $timeString) : [],
+                $mode & CarbonInterface::TRANSLATE_DAYS ? static::getTranslationArray($weekdays, 7, $timeString) : [],
+                $mode & CarbonInterface::TRANSLATE_DAYS ? static::getTranslationArray($messages['weekdays_short'], 7, $timeString) : [],
                 $mode & CarbonInterface::TRANSLATE_UNITS ? array_map(function ($unit) use ($messages, $key, $cleanWord) {
                     $parts = explode('|', $messages[$unit]);
 
@@ -337,6 +423,24 @@ trait Localization
         }, " $timeString "), 1, -1);
     }
 
+    private static function getTranslationArray($translation, $length, $timeString)
+    {
+        $filler = '>>DO NOT REPLACE<<';
+
+        if (is_array($translation)) {
+            return array_pad($translation, $length, $filler);
+        }
+
+        $list = [];
+        $date = static::now();
+
+        for ($i = 0; $i < $length; $i++) {
+            $list[] = $translation($date, $timeString, $i) ?? $filler;
+        }
+
+        return $list;
+    }
+
     /**
      * Translate a time string from the current locale (`$date->locale()`) to an other.
      *
@@ -347,7 +451,7 @@ trait Localization
      */
     public function translateTimeStringTo($timeString, $to = null)
     {
-        return static::translateTimeString($timeString, $this->getLocalTranslator()->getLocale(), $to);
+        return static::translateTimeString($timeString, $this->getTranslatorLocale(), $to);
     }
 
     /**
@@ -361,10 +465,10 @@ trait Localization
     public function locale(string $locale = null, ...$fallbackLocales)
     {
         if ($locale === null) {
-            return $this->getLocalTranslator()->getLocale();
+            return $this->getTranslatorLocale();
         }
 
-        if (!$this->localTranslator || $this->localTranslator->getLocale() !== $locale) {
+        if (!$this->localTranslator || $this->getTranslatorLocale($this->localTranslator) !== $locale) {
             $translator = Translator::get($locale);
 
             if (!empty($fallbackLocales)) {
@@ -392,7 +496,7 @@ trait Localization
      */
     public static function getLocale()
     {
-        return static::translator()->getLocale();
+        return static::getLocaleAwareTranslator()->getLocale();
     }
 
     /**
@@ -405,7 +509,7 @@ trait Localization
      */
     public static function setLocale($locale)
     {
-        return static::translator()->setLocale($locale) !== false;
+        return static::getLocaleAwareTranslator()->setLocale($locale) !== false;
     }
 
     /**
@@ -585,7 +689,7 @@ trait Localization
      */
     public static function getAvailableLocales()
     {
-        $translator = static::translator();
+        $translator = static::getLocaleAwareTranslator();
 
         return $translator instanceof Translator
             ? $translator->getAvailableLocales()
@@ -606,5 +710,36 @@ trait Localization
         }
 
         return $languages;
+    }
+
+    protected function getTranslatorLocale($translator = null): ?string
+    {
+        if (func_num_args() === 0) {
+            $translator = $this->getLocalTranslator();
+        }
+
+        $translator = static::getLocaleAwareTranslator($translator);
+
+        return $translator ? $translator->getLocale() : null;
+    }
+
+    /**
+     * Throw an error if passed object is not LocaleAwareInterface.
+     *
+     * @param LocaleAwareInterface|null $translator
+     *
+     * @return LocaleAwareInterface|null
+     */
+    protected static function getLocaleAwareTranslator($translator = null)
+    {
+        if (func_num_args() === 0) {
+            $translator = static::translator();
+        }
+
+        if ($translator && !($translator instanceof LocaleAwareInterface || method_exists($translator, 'getLocale'))) {
+            throw new NotLocaleAwareException($translator);
+        }
+
+        return $translator;
     }
 }

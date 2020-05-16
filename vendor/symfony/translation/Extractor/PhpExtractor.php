@@ -100,7 +100,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
      *
      * @param mixed $token
      *
-     * @return string
+     * @return string|null
      */
     protected function normalizeToken($token)
     {
@@ -195,16 +195,15 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     /**
      * Extracts trans message from PHP tokens.
      *
-     * @param array            $tokens
-     * @param MessageCatalogue $catalog
-     * @param string           $filename
+     * @param array  $tokens
+     * @param string $filename
      */
     protected function parseTokens($tokens, MessageCatalogue $catalog/*, string $filename*/)
     {
-        if (\func_num_args() < 3 && __CLASS__ !== \get_class($this) && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface) {
+        if (\func_num_args() < 3 && __CLASS__ !== static::class && __CLASS__ !== (new \ReflectionMethod($this, __FUNCTION__))->getDeclaringClass()->getName() && !$this instanceof \PHPUnit\Framework\MockObject\MockObject && !$this instanceof \Prophecy\Prophecy\ProphecySubjectInterface) {
             @trigger_error(sprintf('The "%s()" method will have a new "string $filename" argument in version 5.0, not defining it is deprecated since Symfony 4.3.', __METHOD__), E_USER_DEPRECATED);
         }
-        $filename = 2 < \func_num_args() ? \func_get_arg(2) : '';
+        $filename = 2 < \func_num_args() ? func_get_arg(2) : '';
 
         $tokenIterator = new \ArrayIterator($tokens);
 
@@ -265,9 +264,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     }
 
     /**
-     * @param string|array $directory
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function extractFromDirectory($directory)
     {
