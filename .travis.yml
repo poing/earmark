@@ -18,6 +18,11 @@ env:
   - TESTBENCH=5.*
   #- TESTBENCH=dev-master
 
+# blocklist
+branches:
+  except:
+  - /^analysis-.*$/
+
 before_install:
   #- composer remove illuminate/support illuminate/console illuminate/database \
   #  illuminate/events illuminate/filesystem illuminate/support
