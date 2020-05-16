@@ -873,6 +873,18 @@ class Grammar extends BaseGrammar
     }
 
     /**
+     * Compile an insert ignore statement into SQL.
+     *
+     * @param  \Illuminate\Database\Query\Builder  $query
+     * @param  array  $values
+     * @return string
+     */
+    public function compileInsertOrIgnore(Builder $query, array $values)
+    {
+        throw new RuntimeException('This database engine does not support inserting while ignoring errors.');
+    }
+
+    /**
      * Compile an insert and get ID statement into SQL.
      *
      * @param  \Illuminate\Database\Query\Builder  $query
@@ -942,7 +954,7 @@ class Grammar extends BaseGrammar
      */
     public function prepareBindingsForUpdate(array $bindings, array $values)
     {
-        $cleanBindings = Arr::except($bindings, ['join', 'select']);
+        $cleanBindings = Arr::except($bindings, ['select', 'join']);
 
         return array_values(
             array_merge($bindings['join'], $values, Arr::flatten($cleanBindings))
@@ -970,7 +982,9 @@ class Grammar extends BaseGrammar
      */
     public function prepareBindingsForDelete(array $bindings)
     {
-        return Arr::flatten($bindings);
+        return Arr::flatten(
+            Arr::except($bindings, 'select')
+        );
     }
 
     /**

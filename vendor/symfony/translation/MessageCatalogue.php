@@ -32,6 +32,10 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
      */
     public function __construct(?string $locale, array $messages = [])
     {
+        if (null === $locale) {
+            @trigger_error(sprintf('Passing "null" to the first argument of the "%s" method has been deprecated since Symfony 4.4 and will throw an error in 5.0.', __METHOD__), E_USER_DEPRECATED);
+        }
+
         $this->locale = $locale;
         $this->messages = $messages;
     }
@@ -154,9 +158,19 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
     public function add($messages, $domain = 'messages')
     {
         if (!isset($this->messages[$domain])) {
-            $this->messages[$domain] = $messages;
-        } else {
-            $this->messages[$domain] = array_replace($this->messages[$domain], $messages);
+            $this->messages[$domain] = [];
+        }
+        $intlDomain = $domain;
+        $suffixLength = \strlen(self::INTL_DOMAIN_SUFFIX);
+        if (\strlen($domain) > $suffixLength && false !== strpos($domain, self::INTL_DOMAIN_SUFFIX, -$suffixLength)) {
+            $intlDomain .= self::INTL_DOMAIN_SUFFIX;
+        }
+        foreach ($messages as $id => $message) {
+            if (isset($this->messages[$intlDomain]) && \array_key_exists($id, $this->messages[$intlDomain])) {
+                $this->messages[$intlDomain][$id] = $message;
+            } else {
+                $this->messages[$domain][$id] = $message;
+            }
         }
     }
 
@@ -166,7 +180,7 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
     public function addCatalogue(MessageCatalogueInterface $catalogue)
     {
         if ($catalogue->getLocale() !== $this->locale) {
-            throw new LogicException(sprintf('Cannot add a catalogue for locale "%s" as the current locale for this catalogue is "%s"', $catalogue->getLocale(), $this->locale));
+            throw new LogicException(sprintf('Cannot add a catalogue for locale "%s" as the current locale for this catalogue is "%s".', $catalogue->getLocale(), $this->locale));
         }
 
         foreach ($catalogue->all() as $domain => $messages) {
@@ -261,6 +275,8 @@ class MessageCatalogue implements MessageCatalogueInterface, MetadataAwareInterf
                 return $this->metadata[$domain][$key];
             }
         }
+
+        return null;
     }
 
     /**

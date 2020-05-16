@@ -1,6 +1,29 @@
 CHANGELOG
 =========
 
+4.4.0
+-----
+
+ * The `DebugHandlersListener` class has been marked as `final`
+ * Added new Bundle directory convention consistent with standard skeletons
+ * Deprecated the second and third argument of `KernelInterface::locateResource`
+ * Deprecated the second and third argument of `FileLocator::__construct`
+ * Deprecated loading resources from `%kernel.root_dir%/Resources` and `%kernel.root_dir%` as
+   fallback directories. Resources like service definitions are usually loaded relative to the
+   current directory or with a glob pattern. The fallback directories have never been advocated
+   so you likely do not use those in any app based on the SF Standard or Flex edition.
+ * Marked all dispatched event classes as `@final`
+ * Added `ErrorController` to enable the preview and error rendering mechanism
+ * Getting the container from a non-booted kernel is deprecated.
+ * Marked the `AjaxDataCollector`, `ConfigDataCollector`, `EventDataCollector`,
+   `ExceptionDataCollector`, `LoggerDataCollector`, `MemoryDataCollector`,
+   `RequestDataCollector` and `TimeDataCollector` classes as `@final`.
+ * Marked the `RouterDataCollector::collect()` method as `@final`.
+ * The `DataCollectorInterface::collect()` and `Profiler::collect()` methods third parameter signature
+   will be `\Throwable $exception = null` instead of `\Exception $exception = null` in Symfony 5.0.
+ * Deprecated methods `ExceptionEvent::get/setException()`, use `get/setThrowable()` instead
+ * Deprecated class `ExceptionListener`, use `ErrorListener` instead
+
 4.3.0
 -----
 
@@ -31,8 +54,8 @@ CHANGELOG
 
  * deprecated `KernelInterface::getRootDir()` and the `kernel.root_dir` parameter
  * deprecated `KernelInterface::getName()` and the `kernel.name` parameter
- * deprecated the first and second constructor argument of `ConfigDataCollector` 
- * deprecated `ConfigDataCollector::getApplicationName()` 
+ * deprecated the first and second constructor argument of `ConfigDataCollector`
+ * deprecated `ConfigDataCollector::getApplicationName()`
  * deprecated `ConfigDataCollector::getApplicationVersion()`
 
 4.1.0

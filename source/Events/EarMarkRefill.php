@@ -29,7 +29,7 @@ class EarMarkRefill
 
     /**
      * Get the channels the event should broadcast on.
-     *
+ 	 * @codeCoverageIgnore
      * @return \Illuminate\Broadcasting\Channel|array
      */
     public function broadcastOn()

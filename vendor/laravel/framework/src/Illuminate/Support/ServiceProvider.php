@@ -17,7 +17,7 @@ abstract class ServiceProvider
     /**
      * Indicates if loading of the provider is deferred.
      *
-     * @deprecated Implement the \Illuminate\Contracts\Support\DeferrableProvider interface instead. Will be removed in Laravel 5.9.
+     * @deprecated Implement the \Illuminate\Contracts\Support\DeferrableProvider interface instead. Will be removed in Laravel 6.0.
      *
      * @var bool
      */
@@ -94,7 +94,7 @@ abstract class ServiceProvider
      */
     protected function loadViewsFrom($path, $namespace)
     {
-        if (is_array($this->app->config['view']['paths'])) {
+        if (isset($this->app->config['view']['paths']) && is_array($this->app->config['view']['paths'])) {
             foreach ($this->app->config['view']['paths'] as $viewPath) {
                 if (is_dir($appPath = $viewPath.'/vendor/'.$namespace)) {
                     $this->app['view']->addNamespace($namespace, $appPath);
@@ -156,10 +156,8 @@ abstract class ServiceProvider
 
         static::$publishes[$class] = array_merge(static::$publishes[$class], $paths);
 
-        if (! is_null($groups)) {
-            foreach ((array) $groups as $group) {
-                $this->addPublishGroup($group, $paths);
-            }
+        foreach ((array) $groups as $group) {
+            $this->addPublishGroup($group, $paths);
         }
     }
 

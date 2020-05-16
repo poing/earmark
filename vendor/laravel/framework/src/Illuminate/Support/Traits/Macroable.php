@@ -67,7 +67,7 @@ trait Macroable
      * Dynamically handle calls to the class.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      *
      * @throws \BadMethodCallException
@@ -80,18 +80,20 @@ trait Macroable
             ));
         }
 
-        if (static::$macros[$method] instanceof Closure) {
-            return call_user_func_array(Closure::bind(static::$macros[$method], null, static::class), $parameters);
+        $macro = static::$macros[$method];
+
+        if ($macro instanceof Closure) {
+            return call_user_func_array(Closure::bind($macro, null, static::class), $parameters);
         }
 
-        return call_user_func_array(static::$macros[$method], $parameters);
+        return $macro(...$parameters);
     }
 
     /**
      * Dynamically handle calls to the class.
      *
      * @param  string  $method
-     * @param  array   $parameters
+     * @param  array  $parameters
      * @return mixed
      *
      * @throws \BadMethodCallException
@@ -110,6 +112,6 @@ trait Macroable
             return call_user_func_array($macro->bindTo($this, static::class), $parameters);
         }
 
-        return call_user_func_array($macro, $parameters);
+        return $macro(...$parameters);
     }
 }
