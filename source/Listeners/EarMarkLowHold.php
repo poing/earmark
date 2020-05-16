@@ -31,6 +31,5 @@ class EarMarkLowHold implements ShouldQueue
     {
         $earmark = new Serial();
         $earmark->refill();
-
     }
 }

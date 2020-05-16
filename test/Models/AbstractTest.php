@@ -6,7 +6,6 @@ use Orchestra\Testbench\TestCase;
 
 abstract class AbstractTest extends TestCase
 {
-
     /**
      * Setup the test environment.
      */
@@ -18,7 +17,6 @@ abstract class AbstractTest extends TestCase
         $this->loadMigrationsFrom(__DIR__.'../../source/database/migrations');
         $this->withFactories(__DIR__.'../../source/database/factories');
         $this->artisan('migrate');
-    
     }
 
     /**
@@ -60,5 +58,4 @@ abstract class AbstractTest extends TestCase
             //'YourProject\YourPackage\YourPackageServiceProvider',
         ];
     }
-
 }

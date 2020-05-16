@@ -3,28 +3,26 @@
 namespace Poing\Earmark\Http\Controllers;
 
 use DB;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Poing\Earmark\Events\EarMarkRefill;
 
 class Serial extends Controller
 {
-
     /**
      * The prefix and suffix variables.
      */
     protected $prefix;
     protected $suffix;
-    
+
     /**
      * The table column name variables.
      */
     protected $digit;
     protected $group;
-    
+
     /**
      * The default Eloquent models.
-     */    
+     */
     protected $model;
 
     /**
@@ -43,11 +41,10 @@ class Serial extends Controller
      *
      * @param  string  $altPrefix
      * @param  string  $altMin
-     * @param  int  $guards     
+     * @param  int  $guards
      * @return void
      */
-
-    function __construct( $altPrefix = null, $altSuffix = null, $altPadding=null, $altMin=null, $altMax=null )
+    public function __construct($altPrefix = null, $altSuffix = null, $altPadding = null, $altMin = null, $altMax = null)
     {
         $this->model = config('earmark.model');
 
@@ -56,103 +53,92 @@ class Serial extends Controller
 
         $this->digit = config('earmark.columns.digit');
         $this->group = config('earmark.columns.group');
-        $this->min = !is_null($altMin) ? $altMin : config('earmark.range.min');
-        $this->max = !is_null($altMax) ? $altMax : config('earmark.range.max');
-        $this->padding = !is_null($altPadding) ? $altPadding : config('earmark.padding');
+        $this->min = ! is_null($altMin) ? $altMin : config('earmark.range.min');
+        $this->max = ! is_null($altMax) ? $altMax : config('earmark.range.max');
+        $this->padding = ! is_null($altPadding) ? $altPadding : config('earmark.padding');
 
         $this->initHold();
-
     }
-    
-    public function get($count=null)
+
+    public function get($count = null)
     {
-        if ($count)
-        {
+        if ($count) {
             $data = [];
             $i = 1;
-        
+
             for ($i; $i <= $count; $i++) {
-                $data[] = $this->affix($this->getEarMark());   
+                $data[] = $this->affix($this->getEarMark());
             }
-            
+
             return $data;
-                    
         } else {
             return $this->affix($this->getEarMark());
         }
-
     }
-    
+
     public function unset($value)
     {
-    
         $model = config('earmark.model');
-    
-		if (is_array($value))
-		{
-			foreach ($value as $data)
-			{
-				$model::where($this->group,$this->prefix)->
-				//where($this->suffix_col,$this->suffix)->
-				where($this->digit,$this->unfix($data))->
-				delete();				
-			}
-		} else {
-			if (!empty($value))
-			{
-				//$data $this->unfix($data);
-				
-				return $model::where($this->group,$this->prefix)->
-				//where($this->suffix_col,$this->suffix)->
-				where($this->digit,$this->unfix($value))->
-				delete();
-			}
-		}
-    
+
+        if (is_array($value)) {
+            foreach ($value as $data) {
+                $model::where($this->group, $this->prefix)->
+                //where($this->suffix_col,$this->suffix)->
+                where($this->digit, $this->unfix($data))->
+                delete();
+            }
+        } else {
+            if (! empty($value)) {
+                //$data $this->unfix($data);
+
+                return $model::where($this->group, $this->prefix)->
+                //where($this->suffix_col,$this->suffix)->
+                where($this->digit, $this->unfix($value))->
+                delete();
+            }
+        }
     }
-    
+
     private function affix($number)
     {
         $data = $this->zeroPadding($number);
-        return $this->prefix . $data; // . $this->suffix;
+
+        return $this->prefix.$data; // . $this->suffix;
     }
 
     private function unfix($number)
     {
-        $data = ltrim($number,$this->prefix);
+        $data = ltrim($number, $this->prefix);
         //return rtrim($data,$this->suffix);
         return $data;
     }
-    
-
 
     public function getMax()
     {
         $model = config('earmark.model');
 
         return max([
-            $model::where($this->group,$this->prefix)->max($this->digit),
-            $this->min
+            $model::where($this->group, $this->prefix)->max($this->digit),
+            $this->min,
         ]);
     }
 
     private function zeroPadding($value)
     {
-        return str_pad($value,$this->padding,'0',STR_PAD_LEFT);
+        return str_pad($value, $this->padding, '0', STR_PAD_LEFT);
     }
-    
-    public function increment($fill=false)
+
+    public function increment($fill = false)
     {
         $model = config('earmark.accrual');
         $inc = new $model;
         $inc->save();
+
         return $fill ? $this->zeroPadding($inc->id) : $inc->id;
-    
     }
 
     private function generateHold()
     {
-
         $model = config('earmark.model');
         $hold = config('earmark.hold_model');
 
@@ -161,7 +147,6 @@ class Serial extends Controller
         $n = 1;
 
         for ($i = $this->min; $i <= $max; $i++) {
-
             $used = $model::where(
                         $this->group,
                         $this->prefix
@@ -178,30 +163,23 @@ class Serial extends Controller
                         $i
                     )->count();
 
-
-            if ((!$used) && (!$unused)){
-
+            if ((! $used) && (! $unused)) {
                 if ($n <= config('earmark.hold')) {
-
                     $this->insertHold($i);
                     $n++;
-
                 } else {
                     break;
                 }
             }
-
         }
-
     }
-    
+
     public function refill()
     {
         $hold = config('earmark.hold_model');
         $count = $this->checkHold();
         $floor = config('earmark.hold') / 3;
-        if ($count < $floor)
-        {
+        if ($count < $floor) {
             $this->generateHold();
         }
     }
@@ -209,7 +187,8 @@ class Serial extends Controller
     private function checkHold()
     {
         $hold = config('earmark.hold_model');
-        return $hold::where($this->group,$this->prefix)->count();
+
+        return $hold::where($this->group, $this->prefix)->count();
     }
 
     private function initHold()
@@ -234,28 +213,25 @@ class Serial extends Controller
         //$this->initHold();
 
         DB::transaction(
-            function () use(&$hold, &$model, &$digit, &$group, &$data
+            function () use (&$hold, &$model, &$digit, &$group, &$data
         ) {
-
-            $pull = $hold::where(
+                $pull = $hold::where(
                 $this->group,
                 $this->prefix
             )->first();
-            $data = $pull->digit;
-            $hold::destroy($pull->id);
+                $data = $pull->digit;
+                $hold::destroy($pull->id);
 
-            $push = new $model;
-            $push->digit = $data;
-            $push->$group = $this->prefix;
-            $push->save();
+                $push = new $model;
+                $push->digit = $data;
+                $push->$group = $this->prefix;
+                $push->save();
+            });
 
-        });
-        
         //if ($this->checkHold() < config('earmark.hold'))
-            event(new EarMarkRefill());
+        event(new EarMarkRefill());
 
         return $data;
-
     }
 
     private function insertHold($newDigit)
@@ -269,10 +245,8 @@ class Serial extends Controller
         $data->digit = $newDigit;
         $data->$group = $this->prefix;
         $data->save();
-
     }
 
-
-        // Poing\Earmark\Models\EarMark::max('digit')
+    // Poing\Earmark\Models\EarMark::max('digit')
         // Poing\Earmark\Models\EarMark::where('type','alpha')->max('digit')
 }

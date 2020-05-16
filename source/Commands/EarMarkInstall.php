@@ -3,7 +3,6 @@
 namespace Poing\Earmark\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Eloquent\Model;
 
 class EarMarkInstall extends Command
 {
@@ -41,6 +40,5 @@ class EarMarkInstall extends Command
         $this->comment('Publishing EarMark Configuration...');
         $this->callSilent('vendor:publish', ['--tag' => 'earmark-config']);
         $this->info('EarMark installed successfully.');
-
     }
 }
