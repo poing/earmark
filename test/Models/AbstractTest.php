@@ -12,10 +12,7 @@ abstract class AbstractTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        //$this->withFactories(__DIR__.'../../src/database/factories');
-        //$this->artisan('migrate');
-        $this->loadMigrationsFrom(__DIR__.'../../source/database/migrations');
-        $this->withFactories(__DIR__.'../../source/database/factories');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
         $this->artisan('migrate');
     }
 
