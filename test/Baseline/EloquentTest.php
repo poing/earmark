@@ -11,5 +11,6 @@ class EloquentTest extends UnitAbstract
     {
         factory(BaseLineAlpha::class, 50)->create();
         $this->assertEquals(BaseLineAlpha::count(), 50);
+        echo '|';
     }
 }
