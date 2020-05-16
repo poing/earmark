@@ -2,7 +2,6 @@
 
 namespace Earmark\Test\Models;
 
-use Earmark\Test\Models\AbstractTest;
 use Poing\Earmark\Models\Accrual;
 
 /**
@@ -10,21 +9,18 @@ use Poing\Earmark\Models\Accrual;
  */
 class AccrualTest extends AbstractTest
 {
+    public function testData()
+    {
+        $test = new Accrual;
+        $test->save();
+        $this->assertTrue((Accrual::count() == 1));
+    }
 
-  public function testData()
-  {
-    $test = new Accrual;
-    $test->save();
-    $this->assertTrue((Accrual::count() == 1));
-  
-  }
-
-  /**
-   * @covers Poing\EarMark\Models\Accrual::probe()
-   */
-  public function testAccrualClass()
-  {
-	$this->assertTrue(Accrual::probe());
-  }
-
+    /**
+     * @covers Poing\EarMark\Models\Accrual::probe()
+     */
+    public function testAccrualClass()
+    {
+        $this->assertTrue(Accrual::probe());
+    }
 }

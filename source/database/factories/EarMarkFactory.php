@@ -7,11 +7,11 @@ $foo = new Boost;
 $count = $foo->autoIncrement();
 
 $factory->define(Poing\Earmark\Models\EarMark::class, function (Faker $faker) use ($count) {
-
-        $count->next();$count->next();
+    $count->next();
+    $count->next();
 
     return [
-    /*
+        /*
         'digit' => $faker->numberBetween(
             config('earmark.range.min'),
             config('earmark.range.max')
@@ -21,6 +21,4 @@ $factory->define(Poing\Earmark\Models\EarMark::class, function (Faker $faker) us
         'prefix' => config('earmark.prefix'),
         'type' => $faker->word,
     ];
-
 });
-

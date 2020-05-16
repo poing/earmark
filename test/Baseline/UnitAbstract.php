@@ -1,10 +1,10 @@
 <?php
 
-namespace Earmark\Test\Models;
+namespace Earmark\Test\Baseline;
 
 use Orchestra\Testbench\TestCase;
 
-abstract class AbstractTest extends TestCase
+class UnitAbstract extends TestCase
 {
     /**
      * Setup the test environment.
@@ -12,10 +12,8 @@ abstract class AbstractTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        //$this->withFactories(__DIR__.'../../src/database/factories');
-        //$this->artisan('migrate');
-        $this->loadMigrationsFrom(__DIR__.'../../source/database/migrations');
-        $this->withFactories(__DIR__.'../../source/database/factories');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
+        $this->withFactories(__DIR__.'/database/factories');
         $this->artisan('migrate');
     }
 
@@ -52,7 +50,7 @@ abstract class AbstractTest extends TestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Poing\Earmark\EarmarkServiceProvider::class,
+            //\Poing\Earmark\EarmarkServiceProvider::class,
             //\Poing\Ylem\YlemServiceProvider::class,
             //'Cartalyst\Sentry\SentryServiceProvider',
             //'YourProject\YourPackage\YourPackageServiceProvider',
