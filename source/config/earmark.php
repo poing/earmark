@@ -9,7 +9,7 @@ return [
     | This value detemines how many numbers are available for imediate use.
     | Numbers held for quick retreival, without the need to parse the primay
     | table every time a number is requested.
-    | 
+    |
     | Once the hold drops below one-third of this value, it is refilled.
     |
     */

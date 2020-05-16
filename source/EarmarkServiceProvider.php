@@ -3,18 +3,18 @@
 namespace Poing\Earmark;
 
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
-use Illuminate\Http\Resources\Json\Resource;
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
-use Poing\Earmark\Providers\EventServiceProvider;
-use Poing\Earmark\Http\Controllers\Serial;
-use Poing\Earmark\Http\Controllers\Sequential;
 use Poing\Earmark\Commands\EarMarkInstall;
+use Poing\Earmark\Http\Controllers\Sequential;
+use Poing\Earmark\Http\Controllers\Serial;
+use Poing\Earmark\Providers\EventServiceProvider;
+
 //use Illuminate\Foundation\AliasLoader;
 
-class EarmarkServiceProvider extends ServiceProvider {
-
+class EarmarkServiceProvider extends ServiceProvider
+{
     /**
      * Indicates if loading of the provider is deferred.
      *
@@ -27,7 +27,8 @@ class EarmarkServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function boot() {
+    public function boot()
+    {
 
         // defaultStringLength from Apifrontend
         Schema::defaultStringLength(191);
@@ -37,7 +38,7 @@ class EarmarkServiceProvider extends ServiceProvider {
 
         // Publish Configuration Files
         $this->publishes([
-                __DIR__.'/config/earmark.php' => config_path('earmark.php'),
+            __DIR__.'/config/earmark.php' => config_path('earmark.php'),
         ], 'earmark-config');
 
         // Load Commands
@@ -50,8 +51,6 @@ class EarmarkServiceProvider extends ServiceProvider {
         $loader = AliasLoader::getInstance();
         $loader->alias('Earmarked', Facades\EarMarkFacade::class);
         $loader->alias('Earmark', Serial::class);
-
-
     }
 
     /**
@@ -59,7 +58,8 @@ class EarmarkServiceProvider extends ServiceProvider {
      *
      * @return void
      */
-    public function register() {
+    public function register()
+    {
 
         // Register Factories
         $this->registerEloquentFactoriesFrom(__DIR__.'/Database/factories');
@@ -67,10 +67,10 @@ class EarmarkServiceProvider extends ServiceProvider {
         // Default Package Configuration
         $this->mergeConfigFrom(__DIR__.'/config/earmark.php', 'earmark');
         $this->mergeConfigFrom(__DIR__.'/config/default.php', 'earmark');
-        
+
         $this->app->register(EventServiceProvider::class);
-        
-		// @codeCoverageIgnoreStart
+
+        // @codeCoverageIgnoreStart
         //Poing\Earmark\Http\Controllers
         $this->app->singleton('earmark', function () {
             return new Serial;
@@ -80,9 +80,7 @@ class EarmarkServiceProvider extends ServiceProvider {
         $this->app->singleton('sequence', function () {
             return new Sequential;
         });
-		// @codeCoverageIgnoreEnd
-
-
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -95,6 +93,4 @@ class EarmarkServiceProvider extends ServiceProvider {
     {
         $this->app->make(EloquentFactory::class)->load($path);
     }
-
-
 }

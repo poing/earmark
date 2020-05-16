@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Hold extends Model
 {
-
     /**
      * The table associated with the model.
      *
@@ -15,11 +14,10 @@ class Hold extends Model
     protected $table = 'earmark_hold';
 
     /**
-     * Used to test phpunit access to this class
+     * Used to test phpunit access to this class.
      */
     public static function probe()
     {
         return true;
     }
-    
 }
