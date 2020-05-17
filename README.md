@@ -1,16 +1,18 @@
-[![Build Status](https://travis-ci.org/poing/earmark.svg?branch=master)](https://travis-ci.org/poing/earmark)
-[![StyleCI](https://github.styleci.io/repos/190128345/shield?branch=master&style=flat)](https://github.styleci.io/repos/190128345)
-[![Coverage Status](https://coveralls.io/repos/github/poing/earmark/badge.svg?branch=master)](https://coveralls.io/github/poing/earmark?branch=master)
+[![Build Status](https://travis-ci.org/poing/earmark.svg?branch=0.1.2)](https://travis-ci.org/poing/earmark)
+[![StyleCI](https://github.styleci.io/repos/190128345/shield?branch=0.1.2&style=flat)](https://github.styleci.io/repos/190128345)
+[![Coverage Status](https://coveralls.io/repos/github/poing/earmark/badge.svg?branch=0.1.2)](https://coveralls.io/github/poing/earmark?branch=0.1.2)
+
+# Earmark
 
 A Laravel package to earmark sequential values in a series and eliminate any gaps in the series when values are `unset`.  *Allowing for values to be reused.*
 
-It can be used to fetch the next value (or array of values) to be used in an application.  
+It can be used to fetch the next value (or array of values) to be used in an application.  Database locking is used to *prevent* duplicate values from being returned.
 
-**An example...**
+# An example...
 
-Reserving the next available phone extension for a user.  The phone extension can be reserved by the active session, preventing other sessions from obtaining the same value.
+Reserving the next available phone extension for a user.  The phone extension can be reserved by the active session, preventing other sessions from obtaining the same value.  
 
-When a user no longer needs the phone extension, the value can be `unset()`.  Making the value available again for a *future* request.
+When a user leaves the phone extension can be *recycled*, the value can be `unset()`.  Making the value available again for a *future* request.
 
 # Getting Started
 
@@ -138,11 +140,14 @@ $earmark->get(); // Returns: 'ZULU0000005000'
 $earmark->get(3); // Returns: [ 'ZULU0000005001', 'ZULU0000005002', 'ZULU0000005003', ]
 ```
 
-*The new series will not affect the default series, calling the series again will provide the next values.*
+*The new series will not affect the default series, calling the series again **(with the same parameters)** will continue the numeric series.*
 
 ```php
+// Default Series
 $serial = Earkmarked::get(); // Returns: '2014'
 $serial = Earkmarked::get(3); // Returns: [ '2015', '2016', '2017', ]
+
+// Using Same Parameters Again
 $earmark = new Earmark('ZULU', null, 10, 5000, null);
 $earmark->get(); // Returns: 'ZULU0000005004'
 $earmark->get(3); // Returns: [ 'ZULU0000005005', 'ZULU0000005006', 'ZULU0000005007', ]
@@ -154,7 +159,9 @@ Searching for gaps in a numerical series of numbers can be resource intensive.  
 
 This package uses two (`2`) tables, one for the series of used numbers and one to `Hold` a group of available numbers for immediate use.  The package will `get()` the next consecutive number from the `Hold` table.
 
-When the available numbers in the `Hold` falls below one-third, this package will repopulate the `Hold` with more numbers.  *This package works best with Laravel queues.*
+When the available numbers in the `Hold` table falls below one-third, this package will repopulate the `Hold` with more numbers.  *This package works best with Laravel queues.*
+
+Numbers in a series that have been `unset()` will be added to the `Hold` table for *reuse* when updated.  *Numbers in the `Hold` table **are not** sorted, `unset()` numbers will **eventually** be available again.*  
 
 ## Additional Feature
 
@@ -172,3 +179,12 @@ $earmark->increment(true); // Returns: '00000000000000000003'
 
 ```
 
+## Contributing
+
+Thinking of contributing? 
+
+1. Fork & clone the project: `git clone git@github.com:your-username/earmark.git`.
+2. Run the tests and make sure that they pass with your setup: `phpunit`.
+3. Create your bugfix/feature branch and code away your changes. Add tests for your changes.
+4. Make sure all the tests still pass: `phpunit`.
+5. Push to your fork and submit new a pull request.
