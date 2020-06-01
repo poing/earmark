@@ -119,8 +119,8 @@ Earkmarked::unset($serial);
 You can also *specify* the number of values to return in an array:
 
 ```php
-$serial = Earkmarked::get(3); // Returns: [ '2011', '2012', '2013', ]
-Earkmarked::unset($serial);
+$serial = Earmarked::get(3); // Returns: [ '2011', '2012', '2013', ]
+Earmarked::unset($serial);
 ```
 
 ## Advanced Usage
@@ -144,8 +144,8 @@ $earmark->get(3); // Returns: [ 'ZULU0000005001', 'ZULU0000005002', 'ZULU0000005
 
 ```php
 // Default Series
-$serial = Earkmarked::get(); // Returns: '2014'
-$serial = Earkmarked::get(3); // Returns: [ '2015', '2016', '2017', ]
+$serial = Earmarked::get(); // Returns: '2014'
+$serial = Earmarked::get(3); // Returns: [ '2015', '2016', '2017', ]
 
 // Using Same Parameters Again
 $earmark = new Earmark('ZULU', null, 10, 5000, null);
