@@ -2,7 +2,7 @@
   "name": "poing/earmark",
   "description": "Laravel package to generate values in a unique and customizable series.",
   "keywords": ["auto-increment", "autoincrement", "consecutive", "continual", "continued", "continuing", "eloquent", "ensuing", "extension number", "extension", "following", "going on", "increment", "laravel", "prefix", "sequent", "sequential values", "sequential", "sequential", "serial number", "serial", "series", "succedent", "succeeding", "successional", "successive", "suffix", "unique", "values", "zero fill", "zero-fill", "zerofill"],
-  "version": "0.1.2",
+  "version": "0.1.3",
   "homepage": "https://github.com/poing/earmark",
   "license": "MIT",
   "authors": [
