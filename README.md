@@ -112,8 +112,8 @@ Available Functions:
 With the values from the configuration file, use `Earmarked::get()` and `Earmarked::unset()`.
 
 ```php
-$serial = Earkmarked::get(); // Returns: '2010'
-Earkmarked::unset($serial);
+$serial = Earmarked::get(); // Returns: '2010'
+Earmarked::unset($serial);
 ```
 
 You can also *specify* the number of values to return in an array:
