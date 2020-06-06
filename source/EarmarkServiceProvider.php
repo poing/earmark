@@ -34,7 +34,7 @@ class EarmarkServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
 
         // Load Migrations
-        $this->loadMigrationsFrom(__DIR__.'/Database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/database/migrations');
 
         // Publish Configuration Files
         $this->publishes([
@@ -62,7 +62,7 @@ class EarmarkServiceProvider extends ServiceProvider
     {
 
         // Register Factories
-        $this->registerEloquentFactoriesFrom(__DIR__.'/Database/factories');
+        $this->registerEloquentFactoriesFrom(__DIR__.'/database/factories');
 
         // Default Package Configuration
         $this->mergeConfigFrom(__DIR__.'/config/earmark.php', 'earmark');
