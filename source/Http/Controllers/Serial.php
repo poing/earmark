@@ -3,6 +3,7 @@
 namespace Poing\Earmark\Http\Controllers;
 
 use DB;
+use Poing\Earmark\Jobs\EarmarkQueue;
 use Illuminate\Routing\Controller;
 use Poing\Earmark\Events\EarMarkRefill;
 
@@ -57,7 +58,7 @@ class Serial extends Controller
         $this->max = ! is_null($altMax) ? $altMax : config('earmark.range.max');
         $this->padding = ! is_null($altPadding) ? $altPadding : config('earmark.padding');
 
-        $this->initHold();
+        $this->initHold();     
     }
 
     public function get($count = null)
@@ -229,7 +230,10 @@ class Serial extends Controller
             });
 
         //if ($this->checkHold() < config('earmark.hold'))
-        event(new EarMarkRefill());
+        //event(new EarMarkRefill());
+		// $this->prefix, $this->suffix, $this->padding, $this->min, $this->max
+		EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
+
 
         return $data;
     }
