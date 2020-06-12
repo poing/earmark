@@ -4,10 +4,9 @@ namespace Poing\Earmark\Listeners;
 
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 use Poing\Earmark\Events\EarMarkRefill;
 use Poing\Earmark\Http\Controllers\Serial;
-use Illuminate\Support\Facades\Log;
-
 
 class EarMarkLowHold implements ShouldQueue
 {

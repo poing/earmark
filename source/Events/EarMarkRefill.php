@@ -8,7 +8,6 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-
 class EarMarkRefill
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;

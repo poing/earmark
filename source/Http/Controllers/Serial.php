@@ -4,8 +4,8 @@ namespace Poing\Earmark\Http\Controllers;
 
 use DB;
 use Illuminate\Routing\Controller;
-use Poing\Earmark\Events\EarMarkRefill;
 use Illuminate\Support\Facades\Log;
+use Poing\Earmark\Events\EarMarkRefill;
 use Poing\Earmark\Jobs\EarmarkQueue;
 
 class Serial extends Controller
@@ -48,11 +48,11 @@ class Serial extends Controller
      */
     public function __construct($altPrefix = null, $altSuffix = null, $altPadding = null, $altMin = null, $altMax = null)
     {
-		//Log::debug('Serial Construct');
+        //Log::debug('Serial Construct');
 
         $this->model = config('earmark.model');
 
-        $this->prefix = $altPrefix ?: config('earmark.prefix'); 
+        $this->prefix = $altPrefix ?: config('earmark.prefix');
         $this->suffix = $altSuffix ?: config('earmark.suffix');
 
         $this->digit = config('earmark.columns.digit');
@@ -74,11 +74,13 @@ class Serial extends Controller
                 $data[] = $this->affix($this->getEarMark());
             }
             //event(new EarMarkRefill());
-EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
+            EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
+
             return $data;
         } else {
-			// event(new EarMarkRefill());
-EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);        
+            // event(new EarMarkRefill());
+            EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
+
             return $this->affix($this->getEarMark());
         }
     }
@@ -183,13 +185,13 @@ EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min,
 
     public function refill()
     {
-		Log::info('Check Refill');
+        Log::info('Check Refill');
 
         $hold = config('earmark.hold_model');
         $count = $this->checkHold();
         $floor = config('earmark.hold') / 3;
         if ($count < $floor) {
-			Log::info('Earmark Refilled for ' . $this->prefix);
+            Log::info('Earmark Refilled for '.$this->prefix);
 
             $this->generateHold();
         }
@@ -198,15 +200,16 @@ EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min,
     private function checkHold()
     {
         $hold = config('earmark.hold_model');
+
         return $hold::where($this->group, $this->prefix)->count();
     }
 
     private function initHold()
     {
-		//Log::debug('Earmark Hold Intilized');
+        //Log::debug('Earmark Hold Intilized');
         if ($this->checkHold() == 0) {
             $this->generateHold();
-			Log::info('Earmark Hold Intilized for ' . $this->prefix);
+            Log::info('Earmark Hold Intilized for '.$this->prefix);
         }
     }
 
@@ -242,14 +245,13 @@ EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min,
 
         //if ($this->checkHold() < config('earmark.hold'))
         //event(new EarMarkRefill());
-		// $this->prefix, $this->suffix, $this->padding, $this->min, $this->max
-		//EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
-
+        // $this->prefix, $this->suffix, $this->padding, $this->min, $this->max
+        //EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
 
         return $data;
     }
 
-    private function insertHold($newDigit) 
+    private function insertHold($newDigit)
     {
         $model = config('earmark.hold_model');
 
