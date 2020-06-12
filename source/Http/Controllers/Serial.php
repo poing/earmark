@@ -4,6 +4,7 @@ namespace Poing\Earmark\Http\Controllers;
 
 use DB;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Poing\Earmark\Events\EarMarkRefill;
 use Poing\Earmark\Jobs\EarmarkQueue;
 
@@ -47,6 +48,8 @@ class Serial extends Controller
      */
     public function __construct($altPrefix = null, $altSuffix = null, $altPadding = null, $altMin = null, $altMax = null)
     {
+        //Log::debug('Serial Construct');
+
         $this->model = config('earmark.model');
 
         $this->prefix = $altPrefix ?: config('earmark.prefix');
@@ -70,9 +73,14 @@ class Serial extends Controller
             for ($i; $i <= $count; $i++) {
                 $data[] = $this->affix($this->getEarMark());
             }
+            //event(new EarMarkRefill());
+            EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
 
             return $data;
         } else {
+            // event(new EarMarkRefill());
+            EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
+
             return $this->affix($this->getEarMark());
         }
     }
@@ -177,10 +185,14 @@ class Serial extends Controller
 
     public function refill()
     {
+        Log::info('Check Refill');
+
         $hold = config('earmark.hold_model');
         $count = $this->checkHold();
         $floor = config('earmark.hold') / 3;
         if ($count < $floor) {
+            Log::info('Earmark Refilled for '.$this->prefix);
+
             $this->generateHold();
         }
     }
@@ -194,14 +206,16 @@ class Serial extends Controller
 
     private function initHold()
     {
+        //Log::debug('Earmark Hold Intilized');
         if ($this->checkHold() == 0) {
             $this->generateHold();
+            Log::info('Earmark Hold Intilized for '.$this->prefix);
         }
     }
 
     private function getEarMark()
     {
-        $this->initHold();
+        // $this->initHold();
 
         $hold = config('earmark.hold_model');
         $model = config('earmark.model');
@@ -232,7 +246,7 @@ class Serial extends Controller
         //if ($this->checkHold() < config('earmark.hold'))
         //event(new EarMarkRefill());
         // $this->prefix, $this->suffix, $this->padding, $this->min, $this->max
-        EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
+        //EarmarkQueue::dispatch($this->prefix, $this->suffix, $this->padding, $this->min, $this->max);
 
         return $data;
     }
