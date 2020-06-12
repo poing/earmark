@@ -6,6 +6,8 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
+
 
 class EarMarkRefill
 {
@@ -20,6 +22,8 @@ class EarMarkRefill
      */
     public function __construct()
     {
+        //Log::info('Event EarMarkRefill Construct.');
+
         //$this->prefix = $prefix;
     }
 
@@ -30,6 +34,8 @@ class EarMarkRefill
      */
     public function broadcastOn()
     {
+        //Log::info('Event EarMarkRefill Broadcast.');
+
         return new PrivateChannel('channel-name');
     }
 }
