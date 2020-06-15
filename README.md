@@ -1,6 +1,6 @@
-[![Build Status](https://travis-ci.org/poing/earmark.svg?branch=0.1.7)](https://travis-ci.org/poing/earmark)
-[![StyleCI](https://github.styleci.io/repos/190128345/shield?branch=0.1.7&style=flat)](https://github.styleci.io/repos/190128345)
-[![Coverage Status](https://coveralls.io/repos/github/poing/earmark/badge.svg?branch=0.1.7)](https://coveralls.io/github/poing/earmark?branch=0.1.7)
+[![Build Status](https://travis-ci.org/poing/earmark.svg?branch=0.1.8)](https://travis-ci.org/poing/earmark)
+[![StyleCI](https://github.styleci.io/repos/190128345/shield?branch=0.1.8&style=flat)](https://github.styleci.io/repos/190128345)
+[![Coverage Status](https://coveralls.io/repos/github/poing/earmark/badge.svg?branch=0.1.8)](https://coveralls.io/github/poing/earmark?branch=0.1.8)
 
 # Earmark
 
