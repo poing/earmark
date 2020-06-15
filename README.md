@@ -56,6 +56,9 @@ You may want to change the default `QUEUE_CONNECTION` to use another strategy.  
 
 This is the number of series values that are kept in an available pool.  Once the pool drops below a certain level, more values are added to the pool.  *This is where unused values are recycled.*
 
+### <i class="fas fa-puzzle-piece" aria-hidden="true"></i> Puzzle Icon
+{: #puzzle}
+
 ## Number Range
 
 This package *currently* supports a minimal value.  `range.min` will define the starting value of the series.  *Default: 2000*
