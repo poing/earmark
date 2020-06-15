@@ -218,7 +218,7 @@ class Serial extends Controller
         //Log::debug('Earmark Hold Intilized');
         if ($this->checkHold() == 0) {
             $this->generateHold();
-            Log::warning("Earmark hold size of (" . config('earmark.hold') . ") exceeded. \nQueue bypassed");
+            Log::warning('Earmark hold size of ('.config('earmark.hold').") exceeded. \nQueue bypassed");
         }
     }
 
@@ -234,7 +234,7 @@ class Serial extends Controller
 
         $data = null;
 
-		// Generate if Hold is EMPTY
+        // Generate if Hold is EMPTY
         $this->checkEmpty();
 
         DB::transaction(
