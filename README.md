@@ -56,8 +56,11 @@ You may want to change the default `QUEUE_CONNECTION` to use another strategy.  
 
 This is the number of series values that are kept in an available pool.  Once the pool drops below a certain level, more values are added to the pool.  *This is where unused values are recycled.*
 
-### <i class="fas fa-puzzle-piece" aria-hidden="true"></i> Puzzle Icon
-{: #puzzle}
+### Important: 
+
+* Replenishing the hold **will** be time consuming and *may* take **minutes** to complete.  
+* Depending on how you use Earmark, the hold size should be a *multiple* of the **maximum** `get()` requests expected.
+* Hold size *should* be configured to allow for a sufficient number of `get()` requests **after** falling below one-third.
 
 ## Number Range
 
@@ -99,8 +102,8 @@ ALPHA00000000002009
 
 There are two ways to use this package:
 
-* `Earmarked` to use the *default* values in the pool.
-* `Earmark` to create a **new** pool of values to use.
+* `Earmarked` to use the *default* values in the pool.  *The default values are already "Earmarked".*
+* `Earmark` to create a **new** pool of values to use.  *Use custom settings with a new "Earmark".*
 
 Available Functions:
 
@@ -128,7 +131,7 @@ Earmarked::unset($serial);
 
 ## Advanced Usage
 
-You can *initialize* a new series using `Earmark()` and supplying the following variables:
+You can *initialize* a **new** series using `Earmark()` and supplying the following variables:
 
 * prefix
 * suffix *(non-functional placeholder)*
