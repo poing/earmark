@@ -16,6 +16,7 @@ env:
   - TESTBENCH=3.*
   - TESTBENCH=4.*
   - TESTBENCH=5.*
+  - TESTBENCH=6.*
   #- TESTBENCH=dev-master
 
 # blocklist
