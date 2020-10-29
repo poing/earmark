@@ -16,7 +16,7 @@ env:
   - TESTBENCH=3.*
   - TESTBENCH=4.*
   - TESTBENCH=5.*
-  - TESTBENCH=6.*
+  #- TESTBENCH=6.*
   #- TESTBENCH=dev-master
 
 # blocklist
@@ -30,8 +30,8 @@ before_install:
   #  illuminate/events illuminate/filesystem illuminate/support
   - composer require --dev "phpunit/phpunit:8.*" --prefer-dist --no-update
   - composer require --dev "orchestra/testbench:${TESTBENCH}" --prefer-dist --no-update
-  - if: TESTBENCH=6.*
-    composer require --dev "laravel/legacy-factories"
+  #- if: TESTBENCH=6.*
+  #  composer require --dev "laravel/legacy-factories"
     
 #  if: ILLUMINATE=5.5.*
 #    - composer require --dev "orchestra/testbench:3.5.*"
