@@ -30,7 +30,7 @@ before_install:
   #  illuminate/events illuminate/filesystem illuminate/support
   - composer require --dev "phpunit/phpunit:8.*" --prefer-dist --no-update
   - composer require --dev "orchestra/testbench:${TESTBENCH}" --prefer-dist --no-update
-  - if [ TESTBENCH=6.* ]; then
+  - if [ $TESTBENCH="6.*" ]; then
       composer require --dev "laravel/legacy-factories"
     fi
 #  if: ILLUMINATE=5.5.*
