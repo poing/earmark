@@ -16,7 +16,7 @@ env:
   - TESTBENCH=3.*
   - TESTBENCH=4.*
   - TESTBENCH=5.*
-  #- TESTBENCH=6.*
+  - TESTBENCH=6.*
   #- TESTBENCH=dev-master
 
 # blocklist
@@ -39,6 +39,8 @@ matrix:
   exclude:
     - php: 7.2
       env: TESTBENCH=dev-master
+    - php: 7.2
+      env: TESTBENCH=6.*
     - php: 7.3
       env: TESTBENCH=dev-master
     - php: hhvm
