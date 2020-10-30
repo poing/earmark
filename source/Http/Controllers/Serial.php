@@ -52,14 +52,14 @@ class Serial extends Controller
 
         $this->model = config('earmark.model');
 
-        #$this->prefix = $altPrefix ?: config('earmark.prefix');
-        #$this->suffix = $altSuffix ?: config('earmark.suffix');
+//         $this->prefix = $altPrefix ?: config('earmark.prefix');
+//         $this->suffix = $altSuffix ?: config('earmark.suffix');
 
         $this->digit = config('earmark.columns.digit');
         $this->group = config('earmark.columns.group');
-        #$this->min = ! is_null($altMin) ? $altMin : config('earmark.range.min');
-        #$this->max = ! is_null($altMax) ? $altMax : config('earmark.range.max');
-        #$this->padding = ! is_null($altPadding) ? $altPadding : config('earmark.padding');
+//         $this->min = ! is_null($altMin) ? $altMin : config('earmark.range.min');
+//         $this->max = ! is_null($altMax) ? $altMax : config('earmark.range.max');
+//         $this->padding = ! is_null($altPadding) ? $altPadding : config('earmark.padding');
 
         $this->initHold();
     }
