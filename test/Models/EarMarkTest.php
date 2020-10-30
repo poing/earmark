@@ -19,7 +19,7 @@ class EarMarkTest extends AbstractTest
 
     public function testRefill()
     {
-        $earmark = new \Poing\Earmark\Http\Controllers\Serial('ZULU', null, 10, 5000, null);
+        $earmark = new \Poing\Earmark\Http\Controllers\Serial('ZULU', '', 10, 5000, '');
         $data = $earmark->get();
         $earmark->get(30);
         $earmark->unset($data);
