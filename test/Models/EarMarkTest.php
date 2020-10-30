@@ -23,7 +23,7 @@ class EarMarkTest extends AbstractTest
           null,
           null,
           null,
-          null,
+          2000,
           null
         );
         $data = $earmark->get();
