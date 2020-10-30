@@ -46,20 +46,20 @@ class Serial extends Controller
      * @param  int  $guards
      * @return void
      */
-    public function __construct($altPrefix = null, $altSuffix = null, $altPadding = null, $altMin = null, $altMax = null)
+    public function __construct($altPrefix, $altSuffix, $altPadding, $altMin, $altMax)
     {
         //Log::debug('Serial Construct');
 
         $this->model = config('earmark.model');
 
-        $this->prefix = $altPrefix ?: config('earmark.prefix');
-        $this->suffix = $altSuffix ?: config('earmark.suffix');
+        #$this->prefix = $altPrefix ?: config('earmark.prefix');
+        #$this->suffix = $altSuffix ?: config('earmark.suffix');
 
         $this->digit = config('earmark.columns.digit');
         $this->group = config('earmark.columns.group');
-        $this->min = ! is_null($altMin) ? $altMin : config('earmark.range.min');
-        $this->max = ! is_null($altMax) ? $altMax : config('earmark.range.max');
-        $this->padding = ! is_null($altPadding) ? $altPadding : config('earmark.padding');
+        #$this->min = ! is_null($altMin) ? $altMin : config('earmark.range.min');
+        #$this->max = ! is_null($altMax) ? $altMax : config('earmark.range.max');
+        #$this->padding = ! is_null($altPadding) ? $altPadding : config('earmark.padding');
 
         $this->initHold();
     }
@@ -150,6 +150,7 @@ class Serial extends Controller
     {
         $model = config('earmark.model');
         $hold = config('earmark.hold_model');
+        // $offset = 1;
 
         $max = $this->getMax() + config('earmark.hold');
 

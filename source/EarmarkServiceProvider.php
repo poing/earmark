@@ -73,7 +73,13 @@ class EarmarkServiceProvider extends ServiceProvider
         // @codeCoverageIgnoreStart
         //Poing\Earmark\Http\Controllers
         $this->app->singleton('earmark', function () {
-            return new Serial;
+            return new Serial(
+              config('earmark.prefix'),
+              config('earmark.suffix'),
+              config('earmark.padding'),
+              config('earmark.range.min'),
+              config('earmark.range.max')
+            );
         });
 
         //Poing\Earmark\Http\Controllers
