@@ -24,9 +24,10 @@
         "illuminate/support": ">=5.8"
   },
   "require-dev": {
-        "orchestra/testbench": "^5",
-        "phpunit/phpunit": "8.*",
-        "php-coveralls/php-coveralls": "^2.2"
+        "orchestra/testbench": "^6",
+        "phpunit/phpunit": "9.*",
+        "php-coveralls/php-coveralls": "^2.2",
+    "laravel/legacy-factories": "^1.0.4"
   },
   "autoload": {
     "psr-4": {
