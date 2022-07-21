@@ -2,6 +2,8 @@
 [![StyleCI](https://github.styleci.io/repos/190128345/shield?branch=0.1.10&style=flat)](https://github.styleci.io/repos/190128345)
 [![Coverage Status](https://coveralls.io/repos/github/poing/earmark/badge.svg?branch=0.1.10)](https://coveralls.io/github/poing/earmark?branch=0.1.10)
 
+![example workflow](https://github.com/poing/earmark/actions/workflows/php.yml/badge.svg)
+
 # Earmark
 
 A Laravel package to earmark sequential values in a series and eliminate any gaps in the series when values are `unset`.  *Allowing for values to be reused.*
