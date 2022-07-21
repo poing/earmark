@@ -40,5 +40,5 @@ jobs:
     #   run: composer run-script test
     
     - name: Unit Testing
-      run: mkdir -p build/logs
+      #run: mkdir -p build/logs
       run: phpunit --verbose --coverage-clover build/logs/clover.xml
