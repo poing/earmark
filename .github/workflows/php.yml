@@ -38,8 +38,7 @@ jobs:
 
     # - name: Run test suite
     #   run: composer run-script test
-
-script:
-  - mkdir -p build/logs
-  - phpunit --verbose --coverage-clover build/logs/clover.xml
-  #  - vendor/bin/phpunit --verbose
+    
+    - name: Unit Testing
+      run: mkdir -p build/logs
+      run: phpunit --verbose --coverage-clover build/logs/clover.xml
