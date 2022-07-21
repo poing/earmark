@@ -44,4 +44,4 @@ jobs:
     
     - name: Unit Testing
       #run: mkdir -p build/logs
-      run: phpunit --verbose --coverage-clover build/logs/clover.xml
+      run: vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
