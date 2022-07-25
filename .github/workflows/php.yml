@@ -1,4 +1,4 @@
-name: PHP Composer
+name: Freek Version
 
 on:
   push:
@@ -6,71 +6,60 @@ on:
   pull_request:
     branches: [ "0.2.0" ]
 
-#permissions:
-#  contents: read
-
 jobs:
-  build:
+    php-tests:
+        runs-on: ${{ matrix.os }}
 
-    runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php: [7.4, 7.3, 7.2]
+                laravel: [6.*, 5.8.*, 5.7.*, 5.6.*, 5.5.*]
+                dependency-version: [prefer-lowest, prefer-stable]
+                os: [ubuntu-latest, windows-latest]
+                include:
+                    - laravel: 6.*
+                      testbench: 4.*
+                    - laravel: 5.8.*
+                      testbench: 3.8.*
+                    - laravel: 5.7.*
+                      testbench: 3.7.*
+                    - laravel: 5.6.*
+                      testbench: 3.6.*
+                    - laravel: 5.5.*
+                      testbench: 3.5.*
+                exclude:
+                    - laravel: 5.7.*
+                      php: 7.4
+                    - laravel: 5.6.*
+                      php: 7.4
+                    - laravel: 5.5.*
+                      php: 7.4
 
-#    services:
-#      mysql:
-#        image: mysql:latest
-#        env:
-#          MYSQL_ALLOW_EMPTY_PASSWORD: false
-#          MYSQL_ROOT_PASSWORD: password
-#          MYSQL_DATABASE: laravel
-#        ports:
-#          - 3306/tcp
-#        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-#
-#      redis:
-#        image: redis
-#        ports:
-#          - 6379/tcp
-#        options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.dependency-version }} - ${{ matrix.os }}
 
-    steps:
-    - uses: actions/checkout@v3    
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: 7.2
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v1
 
-    - name: Setup PHP
-      run: composer require --dev "orchestra/testbench:3.8.*" --prefer-dist --no-update
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v1
+              with:
+                  php-version: ${{ matrix.php }}
+                  extension-csv: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+                  coverage: none
 
-    - name: Create SQLite database
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
+            - name: Install dependencies
+              run: |
+                  composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+                  composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
-    - name: Validate composer.json and composer.lock
-      # run: composer validate --strict
-      run: composer validate
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
-
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
-
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
-
-    # - name: Run test suite
-    #   run: composer run-script test
-    
-    - name: Unit Testing
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      #run: mkdir -p build/logs
-      run: vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
+            - name: Execute tests
+              run: vendor/bin/phpunit
+              
+              #
+#    - name: Unit Testing
+#      env:
+#        DB_CONNECTION: sqlite
+#        DB_DATABASE: database/database.sqlite
+#      #run: mkdir -p build/logs
+#      run: vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
