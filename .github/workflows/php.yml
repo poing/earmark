@@ -38,6 +38,9 @@ jobs:
       with:
         php-version: 7.2
 
+    - name: Setup PHP
+      run: composer require --dev "orchestra/testbench:TESTBENCH=3.8.*" --prefer-dist --no-update
+
     - name: Create SQLite database
       run: |
         mkdir -p database
