@@ -38,7 +38,7 @@ jobs:
       with:
         php-version: 7.2
 
-    - name: Create DB and schemas
+    - name: Create SQLite database
       run: |
         mkdir -p database
         touch database/database.sqlite
@@ -66,5 +66,8 @@ jobs:
     #   run: composer run-script test
     
     - name: Unit Testing
+      env:
+        DB_CONNECTION: sqlite
+        DB_DATABASE: database/database.sqlite
       #run: mkdir -p build/logs
       run: vendor/bin/phpunit --verbose --coverage-clover build/logs/clover.xml
