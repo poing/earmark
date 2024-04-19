@@ -3,3 +3,4 @@
 composer.lock
 *.cache
 .DS_Store
+*.bak
