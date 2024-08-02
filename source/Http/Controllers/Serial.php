@@ -115,12 +115,11 @@ class Serial extends Controller
         return $this->prefix.$data; // . $this->suffix;
     }
 
-
     private function unfix($number)
     {
         if ($this->prefix) {
             $data = ltrim($number, $this->prefix);
-        } else {    
+        } else {
             $data = $number;
         }
 

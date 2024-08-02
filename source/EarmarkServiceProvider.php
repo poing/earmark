@@ -93,13 +93,11 @@ class EarmarkServiceProvider extends ServiceProvider
             $this->loadFactoriesFrom($path);
         }
     }
-    
+
     /*  Depreciated
     protected function registerEloquentFactoriesFrom($path)
     {
         $this->app->make(EloquentFactory::class)->load($path);
     }
     */
-
-
 }
