@@ -1,44 +1,78 @@
 {
-  "name": "poing/earmark",
-  "description": "Laravel package to generate values in a unique and customizable series.",
-  "keywords": ["auto-increment", "autoincrement", "consecutive", "continual", "continued", "continuing", "eloquent", "ensuing", "extension number", "extension", "following", "going on", "increment", "laravel", "prefix", "sequent", "sequential values", "sequential", "sequential", "serial number", "serial", "series", "succedent", "succeeding", "successional", "successive", "suffix", "unique", "values", "zero fill", "zero-fill", "zerofill"],
-  "version": "0.1.9",
-  "homepage": "https://github.com/poing/earmark",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Brian LaVallee",
-      "email": "brian.lavallee@invite-comm.jp"
-    }
-  ],
-  "support": {
-    "issues": "https://github.com/poing/earmark/issues",
-    "irc": "irc://irc.freenode.org/poing"
-  },
-  "require": {
-        "php": ">=7.2",
-        "illuminate/console": ">=5.8",
-        "illuminate/database": ">=5.8",
-        "illuminate/events": ">=5.8",
-        "illuminate/filesystem": ">=5.8",
-        "illuminate/support": ">=5.8"
-  },
-  "require-dev": {
-        "orchestra/testbench": "^5",
-        "phpunit/phpunit": "8.*",
+    "name": "poing/earmark",
+    "description": "Laravel package to generate values in a unique and customizable series.",
+    "keywords": [
+        "auto-increment",
+        "autoincrement",
+        "consecutive",
+        "continual",
+        "continued",
+        "continuing",
+        "eloquent",
+        "ensuing",
+        "extension number",
+        "extension",
+        "following",
+        "going on",
+        "increment",
+        "laravel",
+        "prefix",
+        "sequent",
+        "sequential values",
+        "sequential",
+        "sequential",
+        "serial number",
+        "serial",
+        "series",
+        "succedent",
+        "succeeding",
+        "successional",
+        "successive",
+        "suffix",
+        "unique",
+        "values",
+        "zero fill",
+        "zero-fill",
+        "zerofill"
+    ],
+    "version": "0.1.9",
+    "homepage": "https://github.com/poing/earmark",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Brian LaVallee",
+            "email": "brian.lavallee@invite-comm.jp"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/poing/earmark/issues",
+        "irc": "irc://irc.freenode.org/poing"
+    },
+    "require": {
+        "php": ">=8.1",
+        "illuminate/console": ">=11.0",
+        "illuminate/database": ">=11.0",
+        "illuminate/events": ">=11.0",
+        "illuminate/filesystem": ">=11.0",
+        "illuminate/support": ">=11.0",
+        "laravel/legacy-factories": "^1.4"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0",
         "php-coveralls/php-coveralls": "^2.2"
-  },
-  "autoload": {
-    "psr-4": {
-      "Poing\\Earmark\\": "source/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Earmark\\Test\\": "test/"
-    }
-  },
-  "minimum-stability": "stable",
+    },
+    "autoload": {
+        "psr-4": {
+            "Poing\\Earmark\\": "source/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Earmark\\Test\\": "test/"
+        }
+    },
+    "minimum-stability": "stable",
     "extra": {
         "laravel": {
             "providers": [
