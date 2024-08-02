@@ -1,24 +1,27 @@
 <?php
 
-use Faker\Generator as Faker;
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Poing\Earmark\Helpers\Boost;
+use Poing\Earmark\Models\EarMark;
 
-$foo = new Boost;
-$count = $foo->autoIncrement();
+class EarMarkFactory extends Factory
+{
+    protected $model = EarMark::class;
 
-$factory->define(Poing\Earmark\Models\EarMark::class, function (Faker $faker) use ($count) {
-    $count->next();
-    $count->next();
+    public function definition()
+    {
+        $boost = new Boost;
+        $count = $boost->autoIncrement();
 
-    return [
-        /*
-        'digit' => $faker->numberBetween(
-            config('earmark.range.min'),
-            config('earmark.range.max')
-        ),
-    */
-        'digit' => $autoIncrement->current(),
-        'prefix' => config('earmark.prefix'),
-        'type' => $faker->word,
-    ];
-});
+        $count->next();
+        $count->next();
+
+        return [
+            'digit' => $count->current(),
+            'prefix' => config('earmark.prefix'),
+            'type' => $this->faker->word,
+        ];
+    }
+}

@@ -117,11 +117,25 @@ class Serial extends Controller
 
     private function unfix($number)
     {
+        if ($this->prefix) {
+            $data = ltrim($number, $this->prefix);
+        } else {
+            $data = $number;
+        }
+
+        //return rtrim($data,$this->suffix);
+        return $data;
+    }
+
+    /*
+    private function unfix($number)
+    {
         $data = ltrim($number, $this->prefix);
 
         //return rtrim($data,$this->suffix);
         return $data;
     }
+    */
 
     public function getMax()
     {

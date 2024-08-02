@@ -35,7 +35,7 @@
         "zero-fill",
         "zerofill"
     ],
-    "version": "0.2.1",
+    "version": "0.2.2",
     "homepage": "https://github.com/poing/earmark",
     "license": "MIT",
     "authors": [
@@ -54,8 +54,7 @@
         "illuminate/database": ">=11.0",
         "illuminate/events": ">=11.0",
         "illuminate/filesystem": ">=11.0",
-        "illuminate/support": ">=11.0",
-        "laravel/legacy-factories": "^1.4"
+        "illuminate/support": ">=11.0"
     },
     "require-dev": {
         "orchestra/testbench": "^9.0",
