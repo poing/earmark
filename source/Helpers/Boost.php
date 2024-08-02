@@ -4,6 +4,7 @@ namespace Poing\Earmark\Helpers;
 
 /**
  * Junk code, attempt to use function in factory.
+ *
  * @codeCoverageIgnore
  */
 class Boost

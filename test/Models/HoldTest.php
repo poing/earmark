@@ -7,7 +7,6 @@ use Poing\Earmark\Models\Hold;
 #[CoversClass(Hole::class)]
 class HoldTest extends AbstractTestCase
 {
-
     #[CoversMethod('probe')]
     public function testHoldClass()
     {
