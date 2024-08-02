@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Poing\Earmark\Models\EarMark;
 use Poing\Earmark\Helpers\Boost;
+use Poing\Earmark\Models\EarMark;
 
 class EarMarkFactory extends Factory
 {
