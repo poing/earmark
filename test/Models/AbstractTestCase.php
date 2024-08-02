@@ -4,7 +4,7 @@ namespace Earmark\Test\Models;
 
 use Orchestra\Testbench\TestCase;
 
-abstract class AbstractTest extends TestCase
+abstract class AbstractTestCase extends TestCase
 {
     /**
      * Setup the test environment.
@@ -20,7 +20,6 @@ abstract class AbstractTest extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -29,9 +28,9 @@ abstract class AbstractTest extends TestCase
         // Make sure php-sqlite3 is installed on the system.
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 
@@ -43,7 +42,6 @@ abstract class AbstractTest extends TestCase
      * 'providers' array in the config/app.php file.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return array
      */
     protected function getPackageProviders($app)

@@ -21,7 +21,6 @@ class UnitAbstract extends TestCase
      * Define environment setup.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -30,9 +29,9 @@ class UnitAbstract extends TestCase
         // Make sure php-sqlite3 is installed on the system.
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
-            'driver'   => 'sqlite',
+            'driver' => 'sqlite',
             'database' => ':memory:',
-            'prefix'   => '',
+            'prefix' => '',
         ]);
     }
 
@@ -44,7 +43,6 @@ class UnitAbstract extends TestCase
      * 'providers' array in the config/app.php file.
      *
      * @param  \Illuminate\Foundation\Application  $app
-     *
      * @return array
      */
     protected function getPackageProviders($app)

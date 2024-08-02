@@ -4,14 +4,10 @@ namespace Earmark\Test\Models;
 
 use Poing\Earmark\Models\EarMark;
 
-/**
- * @coversDefaultClass Poing\EarMark\Models\EarMark
- */
-class EarMarkTest extends AbstractTest
+#[CoversClass(EarMark::class)]
+class EarMarkTest extends AbstractTestCase
 {
-    /**
-     * @covers Poing\EarMark\Models\EarMark::probe()
-     */
+    #[CoversMethod('probe')]
     public function testEarMarkClass()
     {
         $this->assertTrue(EarMark::probe());

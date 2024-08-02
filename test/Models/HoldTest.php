@@ -4,21 +4,16 @@ namespace Earmark\Test\Models;
 
 use Poing\Earmark\Models\Hold;
 
-/**
- * @coversDefaultClass Poing\EarMark\Models\Hold
- */
-class HoldTest extends AbstractTest
+#[CoversClass(Hole::class)]
+class HoldTest extends AbstractTestCase
 {
-    /**
-     * @covers Poing\EarMark\Models\Hold::probe()
-     */
+    #[CoversMethod('probe')]
     public function testHoldClass()
     {
         $this->assertTrue(Hold::probe());
     }
 
-    /** @test */
-    public function commandTest()
+    public function test_commandTest()
     {
         $this->artisan('earmark:config')
             ->expectsOutput('EarMark installed successfully.')
