@@ -7,7 +7,6 @@ use Poing\Earmark\Models\EarMark;
 #[CoversClass(EarMark::class)]
 class EarMarkTest extends AbstractTestCase
 {
-
     #[CoversMethod('probe')]
     public function testEarMarkClass()
     {

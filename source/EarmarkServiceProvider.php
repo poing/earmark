@@ -29,7 +29,6 @@ class EarmarkServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-
         // defaultStringLength from Apifrontend
         Schema::defaultStringLength(191);
 
@@ -60,7 +59,6 @@ class EarmarkServiceProvider extends ServiceProvider
      */
     public function register()
     {
-
         // Register Factories
         $this->registerEloquentFactoriesFrom(__DIR__.'/database/factories');
 

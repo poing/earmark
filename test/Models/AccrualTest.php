@@ -11,7 +11,7 @@ class AccrualTest extends AbstractTestCase
     {
         $test = new Accrual;
         $test->save();
-        $this->assertTrue((Accrual::count() == 1));
+        $this->assertTrue(Accrual::count() == 1);
     }
 
     #[CoversMethod('probe')]

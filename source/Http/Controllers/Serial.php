@@ -118,6 +118,7 @@ class Serial extends Controller
     private function unfix($number)
     {
         $data = ltrim($number, $this->prefix);
+
         //return rtrim($data,$this->suffix);
         return $data;
     }
@@ -157,20 +158,20 @@ class Serial extends Controller
 
         for ($i = $this->min; $i <= $max; $i++) {
             $used = $model::where(
-                        $this->group,
-                        $this->prefix
-                    )->where(
-                        $this->digit,
-                        $i
-                    )->count();
+                $this->group,
+                $this->prefix
+            )->where(
+                $this->digit,
+                $i
+            )->count();
 
             $unused = $hold::where(
-                        $this->group,
-                        $this->prefix
-                    )->where(
-                        $this->digit,
-                        $i
-                    )->count();
+                $this->group,
+                $this->prefix
+            )->where(
+                $this->digit,
+                $i
+            )->count();
 
             if ((! $used) && (! $unused)) {
                 if ($n <= config('earmark.hold')) {
@@ -239,11 +240,11 @@ class Serial extends Controller
 
         DB::transaction(
             function () use (&$hold, &$model, &$digit, &$group, &$data
-        ) {
+            ) {
                 $pull = $hold::where(
-                $this->group,
-                $this->prefix
-            )->first();
+                    $this->group,
+                    $this->prefix
+                )->first();
                 $data = $pull->digit;
                 $hold::destroy($pull->id);
 
@@ -275,5 +276,5 @@ class Serial extends Controller
     }
 
     // Poing\Earmark\Models\EarMark::max('digit')
-        // Poing\Earmark\Models\EarMark::where('type','alpha')->max('digit')
+    // Poing\Earmark\Models\EarMark::where('type','alpha')->max('digit')
 }
