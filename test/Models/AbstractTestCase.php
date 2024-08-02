@@ -4,7 +4,7 @@ namespace Earmark\Test\Models;
 
 use Orchestra\Testbench\TestCase;
 
-abstract class AbstractTest extends TestCase
+abstract class AbstractTestCase extends TestCase
 {
     /**
      * Setup the test environment.

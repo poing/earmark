@@ -4,10 +4,8 @@ namespace Earmark\Test\Models;
 
 use Poing\Earmark\Models\Accrual;
 
-/**
- * @coversDefaultClass Poing\EarMark\Models\Accrual
- */
-class AccrualTest extends AbstractTest
+#[CoversClass(Accrual::class)]
+class AccrualTest extends AbstractTestCase
 {
     public function testData()
     {
@@ -16,9 +14,7 @@ class AccrualTest extends AbstractTest
         $this->assertTrue((Accrual::count() == 1));
     }
 
-    /**
-     * @covers Poing\EarMark\Models\Accrual::probe()
-     */
+    #[CoversMethod('probe')]
     public function testAccrualClass()
     {
         $this->assertTrue(Accrual::probe());
